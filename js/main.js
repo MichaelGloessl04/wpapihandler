@@ -1,4 +1,5 @@
-const axios = require('axios');
+const CalendarHandler = require('./calendar-handler');
+
 
 async function main() {
   const payload = {
@@ -14,17 +15,12 @@ async function main() {
   const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
-  try {
-    const response = await axios.post(
-      'https://dev.htlweiz.at/wordpress/wp-json/tribe/events/v1/events/',
-      payload,
-      { headers: wordpressHeader }
-    );
-
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
+  const ch = new CalendarHandler('https://dev.htlweiz.at/wordpress/wp-json/tribe/events/v1/', wordpressHeader)
+  test = await ch.get_events();
+  test.forEach(element => {
+    console.log([element.title, element.id]);
+  });
+  await ch.remove_event(1312);
 }
 
 if (require.main === module) {
