@@ -1,0 +1,8 @@
+README.md
+setup.cfg
+setup.py
+wpexptract.egg-info/PKG-INFO
+wpexptract.egg-info/SOURCES.txt
+wpexptract.egg-info/dependency_links.txt
+wpexptract.egg-info/requires.txt
+wpexptract.egg-info/top_level.txt

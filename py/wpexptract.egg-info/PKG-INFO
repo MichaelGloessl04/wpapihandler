@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: wpexptract
+Version: 0.1
+Summary: small script to import WP posts
+Home-page: https://github.com/MichaelGloessl04/WP_API_Extractor/py
+Author: Michael Gloessl
+Author-email: mgloessl04@gmail.com
+License: MIT
+Description-Content-Type: text/markdown
+Requires-Dist: beautifulsoup4
+Requires-Dist: requests
