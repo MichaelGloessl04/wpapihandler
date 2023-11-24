@@ -15,12 +15,7 @@ async function main() {
   const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
-  const ch = new CalendarHandler('https://dev.htlweiz.at/wordpress/wp-json/tribe/events/v1/', wordpressHeader)
-  test = await ch.get_events();
-  test.forEach(element => {
-    console.log([element.title, element.id]);
-  });
-  await ch.remove_event(1312);
+  const ch = new CalendarHandler('https://dev.htlweiz.at', wordpressHeader);
 }
 
 if (require.main === module) {
