@@ -1,28 +1,21 @@
-const axios = require('axios');
-const { JSDOM } = require('jsdom');
+const CalendarHandler = require('./calendar-handler');
+
 
 async function main() {
-  const wordpressUser = 'admin';
-  const wordpressPassword = 'Lh5q jpYj nKy3 PNOw AjXP U7mn';
+  const payload = {
+    id: 123,
+    title: 'Your Event Title',
+    start_date: '2023-11-24T10:00:00',
+    end_date: '2023-11-24T12:00:00'
+  };
+
+  const wordpressUser = 'vue_js';
+  const wordpressPassword = 'rXhW lh6q wuuv d3C5 IKrX YMkI';
   const wordpressCredentials = `${wordpressUser}:${wordpressPassword}`;
-  const wordpressToken = Buffer.from(wordpressCredentials).toString('base64');
+  const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
-  try {
-    const response = await axios.get(
-      'https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/990',
-      { headers: wordpressHeader }
-    );
-
-    const content = response.data;
-    console.log(`${content.title.rendered}\n`);
-
-    const dom = new JSDOM(content.content.rendered);
-    const allText = dom.window.document.body.textContent.replace(/\s+/g, ' ').trim();
-    console.log(allText);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
+  const ch = new CalendarHandler('https://dev.htlweiz.at', wordpressHeader);
 }
 
 if (require.main === module) {
