@@ -10,7 +10,7 @@ module.exports = class CalendarHandler {
      * @param {any} headers access token.
      */
     constructor(server_address, headers) {
-        this.#server_address = server_address + '/wordpress/wp-json/tribe/events/v1/';
+        this.#server_address = server_address + '/wp-json/tribe/events/v1/';
         this.#headers = headers;
     }
 

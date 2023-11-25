@@ -1,4 +1,5 @@
 const CalendarHandler = require('./calendar-handler');
+const PostHandler = require('./post-handler');
 
 
 async function main() {
@@ -15,7 +16,9 @@ async function main() {
   const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
-  const ch = new CalendarHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
+  const ph = new PostHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
+  ret = await ph.get_posts({amount:101});
+  console.log(ret);
 }
 
 if (require.main === module) {
