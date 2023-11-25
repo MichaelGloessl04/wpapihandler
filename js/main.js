@@ -15,7 +15,7 @@ async function main() {
   const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
-  const ch = new CalendarHandler('https://dev.htlweiz.at', wordpressHeader);
+  const ch = new CalendarHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 }
 
 if (require.main === module) {
