@@ -1,4 +1,3 @@
-const fs = require('fs');
 const PostHandler = require('./post-handler');
 
 
@@ -17,10 +16,7 @@ async function main() {
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
   const ph = new PostHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
-  ret = await ph.get_posts({amount:100});
-  const jsonString = JSON.stringify(ret, null, 2);
-  fs.writeFileSync('output.json', jsonString);
-  console.log(findDuplicates(ret).length);
+  console.log(await ph.get_posts({id: 990}))
 }
 
 if (require.main === module) {
