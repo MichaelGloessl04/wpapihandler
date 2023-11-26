@@ -79,7 +79,18 @@ module.exports = class PostHandler {
         return [].concat(...posts);
     }
 
-
+    async add_post(payload) {
+        try {
+            const response = await axios.post(
+                this.#server_address,
+                payload,
+                { headers: this.#headers }
+            );
+            return response;
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
 
     async #execute(endpoint) {
         try {

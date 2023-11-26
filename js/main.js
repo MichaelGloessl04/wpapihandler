@@ -3,10 +3,9 @@ const PostHandler = require('./post-handler');
 
 async function main() {
   const payload = {
-    id: 123,
     title: 'Your Event Title',
-    start_date: '2023-11-24T10:00:00',
-    end_date: '2023-11-24T12:00:00'
+    date: '2023-11-24T10:00:00',
+    content: 'Test'
   };
 
   const wordpressUser = 'vue_js';
@@ -16,7 +15,7 @@ async function main() {
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
   const ph = new PostHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
-  console.log(await ph.get_posts({id: 990}))
+  ph.add_post(payload);
 }
 
 if (require.main === module) {
