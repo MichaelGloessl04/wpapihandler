@@ -1,4 +1,4 @@
-const CalendarHandler = require('./calendar-handler');
+const fs = require('fs');
 const PostHandler = require('./post-handler');
 
 
@@ -13,12 +13,14 @@ async function main() {
   const wordpressUser = 'vue_js';
   const wordpressPassword = 'rXhW lh6q wuuv d3C5 IKrX YMkI';
   const wordpressCredentials = `${wordpressUser}:${wordpressPassword}`;
-  const wordpressToken = Buffer.from(wordpressCredentials).toString('base64')
+  const wordpressToken = Buffer.from(wordpressCredentials).toString('base64');
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
   const ph = new PostHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
-  ret = await ph.get_posts({amount:101});
-  console.log(ret);
+  ret = await ph.get_posts({amount:100});
+  const jsonString = JSON.stringify(ret, null, 2);
+  fs.writeFileSync('output.json', jsonString);
+  console.log(findDuplicates(ret).length);
 }
 
 if (require.main === module) {
