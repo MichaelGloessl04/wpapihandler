@@ -69,16 +69,6 @@ module.exports = class PostHandler {
         }
     }
 
-    async #get_amount(amount) {
-        let posts = [];
-        for (let i = 1; i <= (amount / 100) + 1; i++) {
-            posts.push(await this.#execute(
-                `${this.#server_address}?page=${i}&per_page=100`)
-            );
-        }
-        return [].concat(...posts);
-    }
-
     async add_post(payload) {
         try {
             const response = await axios.post(
@@ -90,6 +80,16 @@ module.exports = class PostHandler {
         } catch (error) {
             console.error('Error:', error.message);
         }
+    }
+
+    async #get_amount(amount) {
+        let posts = [];
+        for (let i = 1; i <= (amount / 100) + 1; i++) {
+            posts.push(await this.#execute(
+                `${this.#server_address}?page=${i}&per_page=100`)
+            );
+        }
+        return [].concat(...posts);
     }
 
     async #execute(endpoint) {
