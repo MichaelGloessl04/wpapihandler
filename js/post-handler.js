@@ -69,6 +69,42 @@ module.exports = class PostHandler {
         }
     }
 
+    /**
+     * Asynchronously adds a new post to the WordPress site using the provided payload.
+     *
+     * @async
+     * @param {Object} payload - The data payload for creating a new post.
+     * @returns {Promise<Object>} A promise that resolves to the response object from the server.
+     * @throws {Error} If an error occurs during the execution of the method.
+     *
+     * @example
+     * const postHandler = new PostHandler(serverAddress, headers);
+     * const postPayload = {
+     *   title: 'New Post',
+     *   content: 'This is the content of the new post.',
+     *   // Add other necessary properties
+     * };
+     *
+     * try {
+     *   const response = await postHandler.add_post(postPayload);
+     *   console.log('Post added successfully:', response.data);
+     * } catch (error) {
+     *   console.error(error.message);
+     * }
+     */
+    async add_post(payload) {
+        try {
+            const response = await axios.post(
+                this.#server_address,
+                payload,
+                { headers: this.#headers }
+            );
+            return response;
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
+
     async #get_amount(amount) {
         let posts = [];
         for (let i = 1; i <= (amount / 100) + 1; i++) {
@@ -78,8 +114,6 @@ module.exports = class PostHandler {
         }
         return [].concat(...posts);
     }
-
-
 
     async #execute(endpoint) {
         try {
