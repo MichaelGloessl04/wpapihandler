@@ -15,7 +15,6 @@ async function main() {
   const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
   const ph = new PostHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
-  ph.add_post(payload);
 }
 
 if (require.main === module) {
