@@ -136,7 +136,7 @@ module.exports = class WPApiHandler {
         var id = this.#opt(options, 'id', 'None');
         var amount = this.#opt(options, 'amount', 'None');
 
-        let total = await this.#len();
+        let total = await this.len();
 
         if (id !== 'None') {
             return [await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`)];
@@ -185,14 +185,21 @@ module.exports = class WPApiHandler {
     }
 
     async #get_amount(amount) {
+        const postsPerPage = 100;
         let posts = [];
-        for (let i = 1; i <= (amount / 100) + 1; i++) {
-            posts.push(await this.#execute_get(
-                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i}&per_page=100`)
+    
+        for (let i = 1; i <= Math.ceil(amount / postsPerPage); i++) {
+            const result = await this.#execute_get(
+                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i}&per_page=${postsPerPage}`
             );
+    
+            posts.push(...result); // Use spread operator to concatenate arrays
         }
-        return [].concat(...posts);
+    
+        return posts.slice(0, amount); // Limit the result to the requested amount
     }
+    
+    
 
     async #execute_get(endpoint) {
         try {
@@ -244,7 +251,7 @@ module.exports = class WPApiHandler {
         }
     }
 
-    async #len() {
+    async len() {
         let amount
         await axios.get(
             `${this.#server_address}/wp-json/wp/v2/posts/`,

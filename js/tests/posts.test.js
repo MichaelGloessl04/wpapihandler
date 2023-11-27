@@ -25,12 +25,36 @@ test('get by id', async () => {
     console.error('Error reading or parsing JSON data:', error);
   }
 
-  const posts = await wpa.get_posts({ id: 1327 });
-  console.log(posts);
-  expect(posts[0]).toEqual(jsonData.get_data);
+  const post = await wpa.get_posts({ id: 1327 });
+  console.log(post);
+  expect(post[0]).toEqual(jsonData.get_data);
 });
 
 
 test('get by amount', async () => {
   const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
-});
+
+  // Get the total number of posts
+  const totalPosts = await wpa.len()[0];
+  console.log('Total Posts:', totalPosts);
+
+  // Define test cases as key-value pairs (amount: expected result)
+  const testCases = {
+    10: 10,
+    100: 100,
+    200: 200,
+    [totalPosts]: totalPosts,
+    99999: totalPosts // Assuming totalPosts is the maximum available posts
+  };
+
+  // Iterate through the test cases
+  for (const [amount, expected] of Object.entries(testCases)) {
+    console.log(`Testing for amount: ${amount}`);
+
+    // Fetch posts
+    const posts = await wpa.get_posts({ amount });
+
+    // Check if the number of fetched posts matches the expected amount
+    expect(posts.length).toEqual(Math.min(amount, expected));
+  }
+}, 10000);
