@@ -22,7 +22,7 @@ module.exports = class WPApiHandler {
      * const wpa = new WPApiHandler(serverAddress, headers);
      */
     constructor(server_address, headers) {
-        this.#server_address = server_address + '/wp-json/tribe/events/v1/';
+        this.#server_address = server_address;
         this.#headers = headers;
     }
 
@@ -46,7 +46,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async get_events(id) {
-        const endpoint = this.#server_address + 'events/';
+        const endpoint = this.#server_address + '/wp-json/tribe/events/v1/events/';
         if (id !== undefined) {
             endpoint += id;
         }
@@ -78,7 +78,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async add_event(payload) {
-        const endpoint = this.#server_address + 'events/';
+        const endpoint = this.#server_address + '/wp-json/tribe/events/v1/events/';
         this.#execute_post(endpoint, payload);
     }
 
@@ -102,7 +102,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async remove_event(id) {
-        const endpoint = this.#server_address + 'events/' + id;
+        const endpoint = this.#server_address + '/wp-json/tribe/events/v1/events/' + id;
         this.#execute_delete(endpoint);
     }
     
@@ -137,7 +137,7 @@ module.exports = class WPApiHandler {
         let total = await this.#len();
 
         if (id !== 'None') {
-            return [this.#execute_get(`${this.#server_address}/${id}`)];
+            return [this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`)];
         } else if (amount !== 'None') {
             if (amount >= total[0]) {
                 return this.#get_amount(total[0]);
@@ -173,7 +173,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async add_post(payload) {
-        this.#execute_post(this.#server_address,
+        this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
                            payload)
     }
 
@@ -181,7 +181,7 @@ module.exports = class WPApiHandler {
         let posts = [];
         for (let i = 1; i <= (amount / 100) + 1; i++) {
             posts.push(await this.#execute_get(
-                `${this.#server_address}?page=${i}&per_page=100`)
+                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i}&per_page=100`)
             );
         }
         return [].concat(...posts);
@@ -227,7 +227,7 @@ module.exports = class WPApiHandler {
     async #len() {
         let amount
         await axios.get(
-            this.#server_address,
+            `${this.#server_address}/wp-json/wp/v2/posts/`,
             { headers: this.#headers }
         )
         .then(function (response){
