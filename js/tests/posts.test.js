@@ -15,15 +15,22 @@ const test_post = {
 
 
 test('get by id', async () => {
-  const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress',
-  wordpressHeader);
-  fs.readFile('data.json', 'utf8', async (err, data) => {
-    if (err) {
-      console.error('Error reading the file:', err);
-      return;
-    }
-    const jsonData = JSON.parse(data);
-    data = await wpa.get_posts({id: 1327})[0];
-    expect(data).toBe(jsonData['test-get']);
-  });
+  const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
+
+  let jsonData;
+  try {
+    const data = await fs.promises.readFile('./tests/test-data.json', 'utf8');
+    jsonData = JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading or parsing JSON data:', error);
+  }
+
+  const posts = await wpa.get_posts({ id: 1327 });
+  console.log(posts);
+  expect(posts[0]).toEqual(jsonData.get_data);
+});
+
+
+test('get by amount', async () => {
+  const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 });
