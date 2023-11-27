@@ -139,7 +139,7 @@ module.exports = class WPApiHandler {
         let total = await this.#len();
 
         if (id !== 'None') {
-            return [this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`)];
+            return [await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`)];
         } else if (amount !== 'None') {
             if (amount >= total[0]) {
                 return this.#get_amount(total[0]);
@@ -180,8 +180,8 @@ module.exports = class WPApiHandler {
     }
 
     async put_post(payload) {
-        return await this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
-                                        payload)
+        return await this.#execute_put(`${this.#server_address}/wp-json/wp/v2/posts/${payload.id}`,
+                                       payload)
     }
 
     async #get_amount(amount) {

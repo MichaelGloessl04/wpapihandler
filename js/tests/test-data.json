@@ -1,0 +1,140 @@
+{
+    "test-get": {
+        "id": 1327,
+        "date": "2023-11-27T19:46:42",
+        "date_gmt": "2023-11-27T19:46:42",
+        "guid": {
+            "rendered": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/?p=1327"
+        },
+        "modified": "2023-11-27T19:49:16",
+        "modified_gmt": "2023-11-27T19:49:16",
+        "slug": "test-post",
+        "status": "publish",
+        "type": "post",
+        "link": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/2023\\/11\\/27\\/test-post\\/",
+        "title": {
+            "rendered": "test-post"
+        },
+        "content": {
+            "rendered": "",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "",
+            "protected": false
+        },
+        "author": 2,
+        "featured_media": 0,
+        "comment_status": "open",
+        "ping_status": "open",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "meta": {
+            "_EventAllDay": false,
+            "_EventTimezone": "",
+            "_EventStartDate": "",
+            "_EventEndDate": "",
+            "_EventStartDateUTC": "",
+            "_EventEndDateUTC": "",
+            "_EventShowMap": false,
+            "_EventShowMapLink": false,
+            "_EventURL": "",
+            "_EventCost": "",
+            "_EventCostDescription": "",
+            "_EventCurrencySymbol": "",
+            "_EventCurrencyCode": "",
+            "_EventCurrencyPosition": "",
+            "_EventDateTimeSeparator": "",
+            "_EventTimeRangeSeparator": "",
+            "_EventOrganizerID": [],
+            "_EventVenueID": [],
+            "_OrganizerEmail": "",
+            "_OrganizerPhone": "",
+            "_OrganizerWebsite": "",
+            "_VenueAddress": "",
+            "_VenueCity": "",
+            "_VenueCountry": "",
+            "_VenueProvince": "",
+            "_VenueState": "",
+            "_VenueZip": "",
+            "_VenuePhone": "",
+            "_VenueURL": "",
+            "_VenueStateProvince": "",
+            "_VenueLat": "",
+            "_VenueLng": "",
+            "_VenueShowMap": false,
+            "_VenueShowMapLink": false,
+            "footnotes": ""
+        },
+        "categories": [
+            1
+        ],
+        "tags": [],
+        "_links": {
+            "self": [
+                {
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/posts\\/1327"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/posts"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/types\\/post"
+                }
+            ],
+            "author": [
+                {
+                    "embeddable": true,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/users\\/2"
+                }
+            ],
+            "replies": [
+                {
+                    "embeddable": true,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/comments?post=1327"
+                }
+            ],
+            "version-history": [
+                {
+                    "count": 1,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/posts\\/1327\\/revisions"
+                }
+            ],
+            "predecessor-version": [
+                {
+                    "id": 1328,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/posts\\/1327\\/revisions\\/1328"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/media?parent=1327"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "category",
+                    "embeddable": true,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/categories?post=1327"
+                },
+                {
+                    "taxonomy": "post_tag",
+                    "embeddable": true,
+                    "href": "https:\\/\\/dev.htlweiz.at\\/wordpress\\/wp-json\\/wp\\/v2\\/tags?post=1327"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https:\\/\\/api.w.org\\/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+}
