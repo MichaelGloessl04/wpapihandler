@@ -175,8 +175,13 @@ module.exports = class WPApiHandler {
      * }
      */
     async add_post(payload) {
-        this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
-                           payload)
+        return await this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
+                                        payload)
+    }
+
+    async put_post(payload) {
+        return await this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
+                                        payload)
     }
 
     async #get_amount(amount) {
@@ -203,7 +208,20 @@ module.exports = class WPApiHandler {
 
     async #execute_post(endpoint, payload) {
         try {
-            const response = await axios.get(
+            const response = await axios.post(
+                endpoint,
+                payload,
+                { headers: this.#headers }
+            );
+            return response;
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
+
+    async #execute_put(endpoint, payload) {
+        try {
+            const response = await axios.put(
                 endpoint,
                 payload,
                 { headers: this.#headers }
