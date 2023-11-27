@@ -35,11 +35,11 @@ module.exports = class WPApiHandler {
      * @throws {Error} If an error occurs during the execution of the method.
      *
      * @example
-     * const calendarHandler = new CalendarHandler(serverAddress, headers);
+     * const wpa = new WPApiHandler(serverAddress, headers);
      *
      * try {
-     *   const allEvents = await calendarHandler.get_events(); // Retrieves all events
-     *   const specificEvent = await calendarHandler.get_events('eventID'); // Retrieves a specific event
+     *   const allEvents = await wpa.get_events(); // Retrieves all events
+     *   const specificEvent = await wpa.get_events('eventID'); // Retrieves a specific event
      *   console.log(allEvents); // Array of events
      * } catch (error) {
      *   console.error(error.message);
@@ -62,7 +62,7 @@ module.exports = class WPApiHandler {
      * @throws {Error} If an error occurs during the execution of the method.
      *
      * @example
-     * const calendarHandler = new CalendarHandler(serverAddress, headers);
+     * const wpa = new WPApiHandler(serverAddress, headers);
      * const eventPayload = {
      *   title: 'New Event',
      *   start_date: '2023-12-01',
@@ -71,7 +71,7 @@ module.exports = class WPApiHandler {
      * };
      *
      * try {
-     *   await calendarHandler.new_event(eventPayload);
+     *   await wpa.new_event(eventPayload);
      *   console.log('Event created successfully.');
      * } catch (error) {
      *   console.error(error.message);
@@ -91,11 +91,11 @@ module.exports = class WPApiHandler {
      * @throws {Error} If an error occurs during the execution of the method.
      *
      * @example
-     * const calendarHandler = new CalendarHandler(serverAddress, headers);
+     * const wpa = new WPApiHandler(serverAddress, headers);
      * const eventIdToRemove = 'eventID';
      *
      * try {
-     *   await calendarHandler.remove_event(eventIdToRemove);
+     *   await wpa.remove_event(eventIdToRemove);
      *   console.log('Event removed successfully.');
      * } catch (error) {
      *   console.error(error.message);
@@ -117,14 +117,16 @@ module.exports = class WPApiHandler {
     * @throws {Error} If an error occurs during the execution of the method.
     *
     * @example
+    * const wpa = new WPApiHandler(serverAddress, headers);
+    * 
     * const options1 = { id: '990' };
     * const options2 = { amount: 5 }; // Get first 5 posts
     * const options3 = {}; // Retrieves all posts
     *
     * try {
-    *   const posts1 = await get_posts(options1);
-    *   const posts2 = await get_posts(options2);
-    *   const posts3 = await get_posts(options3);
+    *   const posts1 = await wpa.get_posts(options1);
+    *   const posts2 = await wpa.get_posts(options2);
+    *   const posts3 = await wpa.get_posts(options3);
     *   console.log(posts1); // Array of WordPress posts
     * } catch (error) {
     *   console.error(error.message);
@@ -158,7 +160,7 @@ module.exports = class WPApiHandler {
      * @throws {Error} If an error occurs during the execution of the method.
      *
      * @example
-     * const postHandler = new PostHandler(serverAddress, headers);
+     * const wpa = new WPApiHandler(serverAddress, headers);
      * const postPayload = {
      *   title: 'New Post',
      *   content: 'This is the content of the new post.',
@@ -166,7 +168,7 @@ module.exports = class WPApiHandler {
      * };
      *
      * try {
-     *   const response = await postHandler.add_post(postPayload);
+     *   const response = await wpa.add_post(postPayload);
      *   console.log('Post added successfully:', response.data);
      * } catch (error) {
      *   console.error(error.message);
