@@ -26,7 +26,7 @@ module.exports = class WPApiHandler {
         this.#headers = headers;
     }
 
-    async len() {
+    async post_len() {
         try {
             const response = await axios.get(
                 `${this.#server_address}/wp-json/wp/v2/posts/`,
@@ -144,7 +144,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async get_posts(id) {
-        let total = await this.len();
+        let total = await this.post_len();
         if (id !== undefined) {
             return await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`);
         } else {
