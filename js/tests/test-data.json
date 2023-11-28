@@ -1,17 +1,17 @@
 {
     "get_data": {
-        "id": 1327,
-        "date": "2023-11-27T19:46:42",
-        "date_gmt": "2023-11-27T19:46:42",
+        "id": 1370,
+        "date": "2023-11-28T07:59:03",
+        "date_gmt": "2023-11-28T07:59:03",
         "guid": {
-            "rendered": "https://dev.htlweiz.at/wordpress/?p=1327"
+            "rendered": "https://dev.htlweiz.at/wordpress/?p=1370"
         },
-        "modified": "2023-11-27T19:49:16",
-        "modified_gmt": "2023-11-27T19:49:16",
+        "modified": "2023-11-28T07:59:03",
+        "modified_gmt": "2023-11-28T07:59:03",
         "slug": "test-post",
         "status": "publish",
         "type": "post",
-        "link": "https://dev.htlweiz.at/wordpress/2023/11/27/test-post/",
+        "link": "https://dev.htlweiz.at/wordpress/2023/11/28/test-post/",
         "title": {
             "rendered": "test-post"
         },
@@ -74,7 +74,7 @@
         "_links": {
             "self": [
                 {
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1327"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1370"
                 }
             ],
             "collection": [
@@ -96,36 +96,36 @@
             "replies": [
                 {
                     "embeddable": true,
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/comments?post=1327"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/comments?post=1370"
                 }
             ],
             "version-history": [
                 {
                     "count": 1,
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1327/revisions"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1370/revisions"
                 }
             ],
             "predecessor-version": [
                 {
-                    "id": 1328,
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1327/revisions/1328"
+                    "id": 1371,
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/posts/1370/revisions/1371"
                 }
             ],
             "wp:attachment": [
                 {
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/media?parent=1327"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/media?parent=1370"
                 }
             ],
             "wp:term": [
                 {
                     "taxonomy": "category",
                     "embeddable": true,
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/categories?post=1327"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/categories?post=1370"
                 },
                 {
                     "taxonomy": "post_tag",
                     "embeddable": true,
-                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/tags?post=1327"
+                    "href": "https://dev.htlweiz.at/wordpress/wp-json/wp/v2/tags?post=1370"
                 }
             ],
             "curies": [
