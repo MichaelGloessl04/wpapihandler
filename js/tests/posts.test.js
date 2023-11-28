@@ -35,21 +35,18 @@ test('get by id', async () => {
 		console.error('Error reading or parsing JSON data:', error);
 	}
 
-	const post = await wpa.get_posts({ id: 1370 });
+	const post = await wpa.get_posts(1370);
 	console.log(post);
 	expect(post).toEqual(jsonData.get_data);
 }, 10000);
 
 
-test('get by amount', async () => {
+test('get all', async () => {
 	const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 	totalPosts = await wpa.len();
 
-	expect((await wpa.get_posts({amount: 10})).length).toEqual(10);
-	expect((await wpa.get_posts({amount: 150})).length).toEqual(150);
-	expect((await wpa.get_posts({amount: totalPosts})).length).toEqual(totalPosts);
-	expect((await wpa.get_posts({amount: 9999999})).length).toEqual(totalPosts);
-	expect(hasDuplicates(await wpa.get_posts({amount: 9999999}))).toEqual(false);
+	expect((await wpa.get_posts()).length).toEqual(totalPosts);
+	expect(hasDuplicates(await wpa.get_posts())).toEqual(false);
 }, 20000);
 
 
@@ -57,6 +54,6 @@ test('add post', async () => {
 	const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 	response = await wpa.add_post(test_post);
 	new_post = response.data;
-	exist = await wpa.get_posts({id: response.data.id});
+	exist = await wpa.get_posts(response.data.id);
 	expect(new_post.id).toEqual(exist.id);
 }, 10000);

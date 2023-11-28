@@ -121,47 +121,34 @@ module.exports = class WPApiHandler {
     }
     
     /**
-    * Asynchronously retrieves an array of WordPress posts based on the provided options.
-    *
-    * @async
-    * @param {Object} options - The options for retrieving posts.
-    * @param {string} [options.id='None'] - The ID of a specific post to retrieve.
-    * @param {number} [options.amount='None'] - The number of posts to retrieve.
-    * @returns {Promise<Array>} A promise that resolves to an array of WordPress posts.
-    * @throws {Error} If an error occurs during the execution of the method.
-    *
-    * @example
-    * const wpa = new WPApiHandler(serverAddress, headers);
-    * 
-    * const options1 = { id: '990' };
-    * const options2 = { amount: 5 }; // Get first 5 posts
-    * const options3 = {}; // Retrieves all posts
-    *
-    * try {
-    *   const posts1 = await wpa.get_posts(options1);
-    *   const posts2 = await wpa.get_posts(options2);
-    *   const posts3 = await wpa.get_posts(options3);
-    *   console.log(posts1); // Array of WordPress posts
-    * } catch (error) {
-    *   console.error(error.message);
-    * }
-    */
-    async get_posts(options) {
-        var id = this.#opt(options, 'id', 'None');
-        var amount = this.#opt(options, 'amount', 'None');
-
+     * Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
+     *
+     * @async
+     * @param {string} [id] - The ID of a specific post to retrieve. If not provided, retrieves all posts.
+     * @returns {Promise<Array<Object>>} A promise that resolves to an array of WordPress posts.
+     * @throws {Error} If an error occurs during the execution of the method.
+     *
+     * @example
+     * const wpa = new WPApiHandler(serverAddress, headers);
+     * const postIdToRetrieve = 'postId';
+     *
+     * try {
+     *   const posts = await wpa.get_posts(postIdToRetrieve); // Retrieves a specific post
+     *   console.log(posts); // Array of WordPress posts
+     *
+     *   // Alternatively, to retrieve all posts
+     *   const allPosts = await wpa.get_posts();
+     *   console.log(allPosts); // Array of all WordPress posts
+     * } catch (error) {
+     *   console.error(error.message);
+     * }
+     */
+    async get_posts(id) {
         let total = await this.len();
-
-        if (id !== 'None') {
+        if (id !== undefined) {
             return await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`);
-        } else if (amount !== 'None') {
-            if (amount >= total) {
-                return this.#get_amount(total);
-            } else {
-                return this.#get_amount(amount);
-            }
         } else {
-            return this.#get_amount(total);
+            return await this.#get_amount(total);
         }
     }
 
@@ -206,7 +193,7 @@ module.exports = class WPApiHandler {
             const perPage = Math.min(amount, 100);
     
             posts.push(await this.#execute_get(
-                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=${perPage}`)
+                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=100`)
             );
     
             amount -= perPage;
