@@ -26,6 +26,20 @@ module.exports = class WPApiHandler {
         this.#headers = headers;
     }
 
+    async len() {
+        try {
+            const response = await axios.get(
+                `${this.#server_address}/wp-json/wp/v2/posts/`,
+                { headers: this.#headers }
+            );
+    
+            return parseInt(response.headers['x-wp-total']);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error; // Rethrow the error or handle it appropriately
+        }
+    }
+
     /**
      * Asynchronously retrieves events from the WordPress Tribe Events API based on the provided ID.
      *
@@ -136,18 +150,18 @@ module.exports = class WPApiHandler {
         var id = this.#opt(options, 'id', 'None');
         var amount = this.#opt(options, 'amount', 'None');
 
-        let total = await this.#len();
+        let total = await this.len();
 
         if (id !== 'None') {
-            return [this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`)];
+            return await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`);
         } else if (amount !== 'None') {
-            if (amount >= total[0]) {
-                return this.#get_amount(total[0]);
+            if (amount >= total) {
+                return this.#get_amount(total);
             } else {
                 return this.#get_amount(amount);
             }
         } else {
-            return this.#get_amount(total[0]);
+            return this.#get_amount(total);
         }
     }
 
@@ -175,19 +189,32 @@ module.exports = class WPApiHandler {
      * }
      */
     async add_post(payload) {
-        this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
-                           payload)
+        return await this.#execute_post(`${this.#server_address}/wp-json/wp/v2/posts/`,
+                                        payload)
+    }
+
+    async put_post(payload) {
+        return await this.#execute_put(`${this.#server_address}/wp-json/wp/v2/posts/${payload.id}`,
+                                       payload)
     }
 
     async #get_amount(amount) {
         let posts = [];
-        for (let i = 1; i <= (amount / 100) + 1; i++) {
+        let i = 1;
+        
+        while (amount > 0) {
+            const perPage = Math.min(amount, 100);
+    
             posts.push(await this.#execute_get(
-                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i}&per_page=100`)
+                `${this.#server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=${perPage}`)
             );
+    
+            amount -= perPage;
         }
-        return [].concat(...posts);
+    
+        return [].concat(...posts).flat();
     }
+    
 
     async #execute_get(endpoint) {
         try {
@@ -203,7 +230,20 @@ module.exports = class WPApiHandler {
 
     async #execute_post(endpoint, payload) {
         try {
-            const response = await axios.get(
+            const response = await axios.post(
+                endpoint,
+                payload,
+                { headers: this.#headers }
+            );
+            return response;
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
+
+    async #execute_put(endpoint, payload) {
+        try {
+            const response = await axios.put(
                 endpoint,
                 payload,
                 { headers: this.#headers }
@@ -224,19 +264,6 @@ module.exports = class WPApiHandler {
         } catch (error) {
             console.error('Error:', error.message);
         }
-    }
-
-    async #len() {
-        let amount
-        await axios.get(
-            `${this.#server_address}/wp-json/wp/v2/posts/`,
-            { headers: this.#headers }
-        )
-        .then(function (response){
-            amount = [response.headers['x-wp-total'],
-                      response.headers['x-wp-totalpages']];
-        })
-        return amount;
     }
 
     #opt(options, name, normal) {
