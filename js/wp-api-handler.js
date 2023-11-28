@@ -26,7 +26,24 @@ module.exports = class WPApiHandler {
         this.#headers = headers;
     }
 
-    async len() {
+    /**
+     * Asynchronously retrieves the total number of WordPress posts.
+     *
+     * @async
+     * @returns {Promise<number>} A promise that resolves to the total number of WordPress posts.
+     * @throws {Error} If an error occurs during the execution of the method.
+     *
+     * @example
+     * const wpApiHandler = new WPApiHandler(serverAddress, headers);
+     *
+     * try {
+     *   const totalPosts = await wpApiHandler.post_len();
+     *   console.log('Total number of posts:', totalPosts);
+     * } catch (error) {
+     *   console.error(error.message);
+     * }
+     */
+    async post_len() {
         try {
             const response = await axios.get(
                 `${this.#server_address}/wp-json/wp/v2/posts/`,
@@ -144,7 +161,7 @@ module.exports = class WPApiHandler {
      * }
      */
     async get_posts(id) {
-        let total = await this.len();
+        let total = await this.post_len();
         if (id !== undefined) {
             return await this.#execute_get(`${this.#server_address}/wp-json/wp/v2/posts/${id}`);
         } else {
@@ -201,7 +218,6 @@ module.exports = class WPApiHandler {
     
         return [].concat(...posts).flat();
     }
-    
 
     async #execute_get(endpoint) {
         try {
