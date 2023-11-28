@@ -252,16 +252,17 @@ module.exports = class WPApiHandler {
     }
 
     async len() {
-        let amount
-        await axios.get(
-            `${this.#server_address}/wp-json/wp/v2/posts/`,
-            { headers: this.#headers }
-        )
-        .then(function (response){
-            amount = [response.headers['x-wp-total'],
-                      response.headers['x-wp-totalpages']];
-        })
-        return amount;
+        try {
+            const response = await axios.get(
+                `${this.#server_address}/wp-json/wp/v2/posts/`,
+                { headers: this.#headers }
+            );
+    
+            return response.headers['x-wp-total'];
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error; // Rethrow the error or handle it appropriately
+        }
     }
 
     #opt(options, name, normal) {

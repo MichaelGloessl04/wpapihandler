@@ -9,52 +9,36 @@ const wordpressToken = Buffer.from(wordpressCredentials).toString('base64');
 const wordpressHeader = { 'Authorization': `Basic ${wordpressToken}` };
 
 const test_post = {
-  id: 9999,
-  title: 'test-post'
+	id: 9999,
+	title: 'test-post'
 };
 
 
 test('get by id', async () => {
-  const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
+	const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 
-  let jsonData;
-  try {
-    const data = await fs.promises.readFile('./tests/test-data.json', 'utf8');
-    jsonData = JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading or parsing JSON data:', error);
-  }
+	let jsonData;
+	try {
+		const data = await fs.promises.readFile('./tests/test-data.json', 'utf8');
+		jsonData = JSON.parse(data);
+	} catch (error) {
+		console.error('Error reading or parsing JSON data:', error);
+	}
 
-  const post = await wpa.get_posts({ id: 1327 });
-  console.log(post);
-  expect(post[0]).toEqual(jsonData.get_data);
-});
+	const post = await wpa.get_posts({ id: 1327 });
+	console.log(post);
+	expect(post[0]).toEqual(jsonData.get_data);
+}, 10000);
 
 
 test('get by amount', async () => {
-  const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
+	const wpa = new WPApiHandler('https://dev.htlweiz.at/wordpress', wordpressHeader);
 
-  // Get the total number of posts
-  const totalPosts = await wpa.len()[0];
-  console.log('Total Posts:', totalPosts);
+	const totalPosts = await wpa.len();
+	const testkeys = [10, 100, 200, totalPosts, 99999];
+	const testvalues = [10, 100, 200, totalPosts, totalPosts];
 
-  // Define test cases as key-value pairs (amount: expected result)
-  const testCases = {
-    10: 10,
-    100: 100,
-    200: 200,
-    [totalPosts]: totalPosts,
-    99999: totalPosts // Assuming totalPosts is the maximum available posts
-  };
-
-  // Iterate through the test cases
-  for (const [amount, expected] of Object.entries(testCases)) {
-    console.log(`Testing for amount: ${amount}`);
-
-    // Fetch posts
-    const posts = await wpa.get_posts({ amount });
-
-    // Check if the number of fetched posts matches the expected amount
-    expect(posts.length).toEqual(Math.min(amount, expected));
-  }
+	testkeys.forEach(async (key, i) => {
+    	expect(await wpa.get_posts({amount: key})).toBe(testvalues[i]);
+  	});
 }, 10000);
