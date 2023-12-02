@@ -1,4 +1,4 @@
-import WPApiHandler from "../dist";
+import WPApiHandler from "../index";
 import * as fs from 'fs';
 
 
