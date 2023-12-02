@@ -1,23 +1,37 @@
 {
-    "name": "wpapihandler",
-    "license": "MIT",
-    "version": "0.1.1",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "build": "tsup index.ts --format cjs,esm --dts",
-        "release": "pnpm run build && changeset publish",
-        "lint": "tsc",
-        "test": "jest"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.27.1",
-        "tsup": "^8.0.1",
-        "typescript": "5.3.2",
-        "jest": "^29.7.0"
-    },
-    "dependencies": {
-        "axios": "^1.6.2"
-    }
+  "name": "wpapihandler",
+  "author": "Michael Glössl",
+  "description": "A small module to interact with the WordPress API.",
+  "license": "MIT",
+  "version": "0.0.1",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelGloessl04/wpapihandler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MichaelGloessl04/wpapihandler/issues"
+  },
+  "homepage": "https://github.com/MichaelGloessl04/wpapihandler#readme",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tsup index.ts --format cjs,esm --dts",
+    "release": "pnpm run build && changeset publish",
+    "lint": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "tsup": "^8.0.1",
+    "typescript": "5.3.2",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
 }
