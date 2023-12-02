@@ -1,11 +1,11 @@
-import axios, { AxiosError, AxiosResponse, AxiosHeaders } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 interface Headers {
   authorization: string;
 }
 
 export default class WPApiHandler {
-  private headers: AxiosHeaders;
+  private headers: any;
   private server_address: string;
 
   /**
@@ -24,7 +24,7 @@ export default class WPApiHandler {
    *
    * const wpa = new WPApiHandler(serverAddress, headers);
    */
-  constructor(server_address: string, headers: AxiosHeaders) {
+  constructor(server_address: string, headers: any) {
     this.server_address = server_address;
     this.headers = headers;
   }

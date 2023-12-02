@@ -1,0 +1,3 @@
+import WPApiHandler from "../dist";
+
+
