@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 0.1.0
+
+### Minor Changes
+
+- e076c06: changed the type of the headers constructor parameter
+
 ## 0.0.2
 
 ### Patch Changes
