@@ -1,12 +1,14 @@
-import axios, { AxiosError, AxiosResponse, AxiosHeaders } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
 interface Headers {
-  authorization: string;
+  'Content-Type': string,
+  'Authorization': string;
+  [key: string]: string;
 }
 
 export default class WPApiHandler {
-  private headers: AxiosHeaders;
   private server_address: string;
+  private headers: AxiosRequestConfig;
 
   /**
    * Creates a new instance of the WPApiHandler class.
@@ -24,9 +26,10 @@ export default class WPApiHandler {
    *
    * const wpa = new WPApiHandler(serverAddress, headers);
    */
-  constructor(server_address: string, headers: AxiosHeaders) {
+  constructor(server_address: string, headers: Headers) {
+    const axiosHeaders: AxiosRequestConfig['headers'] = headers;
     this.server_address = server_address;
-    this.headers = headers;
+    this.headers = { headers: axiosHeaders };
   }
 
   /**
@@ -50,7 +53,7 @@ export default class WPApiHandler {
     try {
       const response: AxiosResponse = await axios.get(
         `${this.server_address}/wp-json/wp/v2/posts/`,
-        { headers: this.headers }
+        this.headers
       );
 
       return parseInt(response.headers['x-wp-total']);
@@ -140,7 +143,7 @@ export default class WPApiHandler {
     try {
       const response: AxiosResponse = await axios.get(
         endpoint,
-        { headers: this.headers }
+        this.headers
       );
       return [response.data];
     } catch (error: any) {
@@ -154,7 +157,7 @@ export default class WPApiHandler {
       const response: AxiosResponse = await axios.post(
         endpoint,
         payload,
-        { headers: this.headers }
+        this.headers
       );
       return response;
     } catch (error: any) {
@@ -168,7 +171,7 @@ export default class WPApiHandler {
       const response: AxiosResponse = await axios.put(
         endpoint,
         payload,
-        { headers: this.headers }
+        this.headers
       );
       return response;
     } catch (error: any) {
@@ -181,7 +184,7 @@ export default class WPApiHandler {
     try {
       const response: AxiosResponse = await axios.delete(
         endpoint,
-        { headers: this.headers }
+        this.headers
       );
       return response;
     } catch (error: any) {
