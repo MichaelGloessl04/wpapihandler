@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 0.0.2
+
+### Patch Changes
+
+- 25fb8ca: changed changeset access
+
 ## 0.1.1
 
 ### Patch Changes
