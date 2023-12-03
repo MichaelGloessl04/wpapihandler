@@ -1,18 +1,13 @@
-import WPApiHandler from "../index";
-import * as fs from 'fs';
+import WPApiHandler from '../index';
+import fs from 'fs';
 
+describe('WPApiHandler', () => {
+  it('should instantiate WPApiHandler with provided URL and headers from config file', () => {
+    const configFile = 'tests/test-data/credentials.json';
+    const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
 
-test('wpapihandler constructor', () => {
-    fs.readFile('tests/test-data/credentials.json', 'utf-8', (err, data) => {
-      if (err) {
-        console.error('Error reading the file:', err);
-        return;
-      }
-      try {
-        const parsedData = JSON.parse(data);
-        const wpa = new WPApiHandler(parsedData.URL, parsedData.headers);
-      } catch (parseError) {
-        console.error('Error parsing JSON:', parseError);
-      }
-    });
+    const wpa = new WPApiHandler(config.URL, config.headers);
+
+    expect(wpa).toBeDefined();
   });
+});
