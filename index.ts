@@ -1,4 +1,6 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import { HeaderError, InvalidURLError } from './errors/errors';
+
 
 interface Headers {
   'Content-Type': string,
@@ -30,6 +32,7 @@ export default class WPApiHandler {
     const axiosHeaders: AxiosRequestConfig['headers'] = headers;
     this.server_address = server_address;
     this.headers = { headers: axiosHeaders };
+    this.check_connection();
   }
 
   /**
@@ -59,7 +62,7 @@ export default class WPApiHandler {
       return parseInt(response.headers['x-wp-total']);
     } catch (error) {
       console.error('Error fetching data:', error);
-      throw error; // Rethrow the error or handle it appropriately
+      throw error;
     }
   }
 
@@ -119,6 +122,33 @@ export default class WPApiHandler {
       return await this.execute_get(`${this.server_address}/wp-json/wp/v2/posts/${id}`);
     } else {
       return await this.get_amount(total);
+    }
+  }
+
+  async check_connection() {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${this.server_address}/wp-json/`,
+        this.headers
+      );
+      
+      if (response.status === 200) {
+        console.log('Connection successful!');
+      } else {
+        console.error(`Unexpected response status: ${response.status}`);
+      }
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ENOTFOUND') {
+          throw new InvalidURLError;
+        } else if (error.response?.data.code === 'invalid_username') {
+          throw new HeaderError;
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
