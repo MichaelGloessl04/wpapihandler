@@ -52,14 +52,15 @@ export default class WPApiHandler {
    *   console.error(error.message);
    * }
    */
-  async post_len(): Promise<number> {
+  post_len(): number {
     try {
-      const response: AxiosResponse = await axios.get(
+      axios.get(
         `${this.server_address}/wp-json/wp/v2/posts/`,
         this.headers
-      );
-
-      return parseInt(response.headers['x-wp-total']);
+      ).then((response) => {
+        return parseInt(response.headers['x-wp-total']);
+      });
+      throw new Error();
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
@@ -116,12 +117,12 @@ export default class WPApiHandler {
    *   console.error(error.message);
    * }
    */
-  async get_posts(id?: string): Promise<Array<Object>> {
-    let total: number = await this.post_len();
+  get_posts(id?: string): Promise<Array<Object>> {
+    let total: number = this.post_len();
     if (id !== undefined) {
-      return await this.execute_get(`${this.server_address}/wp-json/wp/v2/posts/${id}`);
+      return this.execute_get(`${this.server_address}/wp-json/wp/v2/posts/${id}`);
     } else {
-      return await this.get_amount(total);
+      return this.get_amount(total);
     }
   }
 
@@ -195,13 +196,14 @@ export default class WPApiHandler {
     return [...posts];
   }
 
-  private async execute_get(endpoint: string): Promise<Array<Object>> {
+  private execute_get(endpoint: string): Array<Object> {
+    let data;
     try {
-      const response: AxiosResponse = await axios.get(
-        endpoint,
-        this.headers
-      );
-      return [response.data];
+      axios.get(endpoint, this.headers)
+        .then((response) => {
+          data = [response.data];
+        });
+      return data;
     } catch (error: any) {
       console.error('Error:', error.message);
       throw error;

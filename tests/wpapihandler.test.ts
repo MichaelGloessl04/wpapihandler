@@ -12,7 +12,7 @@ describe('WPApiHandler', () => {
     expect(wpa).toBeDefined();
   });
 
-  it("should reject invalid URLs.", () => {
+  it('should reject invalid URLs.', () => {
     const configFile = 'tests/test-data/credentials.json';
     const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
   
@@ -20,11 +20,19 @@ describe('WPApiHandler', () => {
     expect(() => invalidUrlWpa.check_connection()).rejects.toThrow(InvalidURLError);
   });
 
-  it("should reject invalid login credentials.", () => {
+  it('should reject invalid login credentials.', () => {
     const configFile = 'tests/test-data/credentials.json';
     const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
 
     const wrongAuthHeadersWpa = new WPApiHandler(config.correct.URL, config.incorrect.headers);
     expect(() => wrongAuthHeadersWpa.check_connection()).rejects.toThrow(HeaderError);
   });
+
+  it('should get all posts.', async () => {
+    const configFile = 'tests/test-data/credentials.json';
+    const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+
+    const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
+    expect(wpa.get_posts()).toBeInstanceOf(Array);
+  }, 10000);
 });
