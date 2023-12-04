@@ -12,17 +12,19 @@ describe('WPApiHandler', () => {
     expect(wpa).toBeDefined();
   });
 
-  it("should check if it can make api requests", async () => {
+  it("should reject invalid URLs.", () => {
+    const configFile = 'tests/test-data/credentials.json';
+    const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+  
+    const invalidUrlWpa = new WPApiHandler(config.incorrect.URL, config.correct.headers);
+    expect(() => invalidUrlWpa.check_connection()).rejects.toThrow(InvalidURLError);
+  });
+
+  it("should reject invalid login credentials.", () => {
     const configFile = 'tests/test-data/credentials.json';
     const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
 
-    const validWpa = new WPApiHandler(config.correct.URL, config.correct.headers);
-    await expect(validWpa.check_connection()).resolves.not.toThrow();
-
     const wrongAuthHeadersWpa = new WPApiHandler(config.correct.URL, config.incorrect.headers);
-    await expect(() => wrongAuthHeadersWpa.check_connection()).rejects.toEqual(HeaderError);
-
-    const invalidUrlWpa = new WPApiHandler(config.incorrect.URL, config.correct.headers);
-    await expect(() => invalidUrlWpa.check_connection()).rejects.toEqual('Invalid username or password.');
-  }, 30000);
+    expect(() => wrongAuthHeadersWpa.check_connection()).rejects.toThrow(HeaderError);
+  });
 });

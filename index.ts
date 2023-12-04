@@ -125,29 +125,55 @@ export default class WPApiHandler {
     }
   }
 
-  async check_connection() {
+  /**
+   * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
+   *
+   * @async
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
+   * @throws {InvalidURLError} If the URL is invalid.
+   * @throws {HeaderError} If there is an issue with the headers, such as invalid username or password.
+   * @throws {Error} If an unexpected error occurs during the execution of the method.
+   *
+   * @example
+   * const wpApiHandler = new WPApiHandler(serverAddress, headers);
+   *
+   * try {
+   *   const isConnected = await wpApiHandler.check_connection();
+   *   if (isConnected) {
+   *     console.log('Connected to the WordPress site.');
+   *   } else {
+   *     console.log('Connection failed.');
+   *   }
+   * } catch (error) {
+   *   console.error(error.message);
+   * }
+   */
+  async check_connection(): Promise<boolean> {
     try {
-      const response: AxiosResponse = await axios.get(
+      const response = await axios.get(
         `${this.server_address}/wp-json/`,
         this.headers
       );
-      
+  
       if (response.status === 200) {
         console.log('Connection successful!');
+        return true;
       } else {
         console.error(`Unexpected response status: ${response.status}`);
+        return false;
       }
-    } catch (error: any) {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.code === 'ENOTFOUND') {
-          throw new InvalidURLError;
+          throw new InvalidURLError('Invalid URL.');
         } else if (error.response?.data.code === 'invalid_username') {
-          throw new HeaderError;
+          throw new HeaderError('Invalid username or password.');
         } else {
           throw error;
         }
       } else {
-        throw error;
+        console.error('An unexpected error occurred:', error);
+        return false;
       }
     }
   }

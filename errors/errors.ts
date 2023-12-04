@@ -1,13 +1,13 @@
 export class InvalidURLError extends Error {
-    constructor() {
-      super('Not a valid URL.');
+    constructor(message: string) {
+      super(message);
       Object.setPrototypeOf(this, InvalidURLError.prototype);
     }
   }
 
 export class HeaderError extends Error {
-  constructor() {
-    super('Invalid username or password.');
+  constructor(message: string) {
+    super(message);
     Object.setPrototypeOf(this, HeaderError.prototype);
   }
 }
