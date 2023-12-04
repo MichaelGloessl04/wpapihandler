@@ -1,4 +1,6 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import { HeaderError, InvalidURLError } from './errors/errors';
+
 
 interface Headers {
   'Content-Type': string,
@@ -30,6 +32,7 @@ export default class WPApiHandler {
     const axiosHeaders: AxiosRequestConfig['headers'] = headers;
     this.server_address = server_address;
     this.headers = { headers: axiosHeaders };
+    this.check_connection();
   }
 
   /**
@@ -59,7 +62,7 @@ export default class WPApiHandler {
       return parseInt(response.headers['x-wp-total']);
     } catch (error) {
       console.error('Error fetching data:', error);
-      throw error; // Rethrow the error or handle it appropriately
+      throw error;
     }
   }
 
@@ -119,6 +122,59 @@ export default class WPApiHandler {
       return await this.execute_get(`${this.server_address}/wp-json/wp/v2/posts/${id}`);
     } else {
       return await this.get_amount(total);
+    }
+  }
+
+  /**
+   * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
+   *
+   * @async
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
+   * @throws {InvalidURLError} If the URL is invalid.
+   * @throws {HeaderError} If there is an issue with the headers, such as invalid username or password.
+   * @throws {Error} If an unexpected error occurs during the execution of the method.
+   *
+   * @example
+   * const wpApiHandler = new WPApiHandler(serverAddress, headers);
+   *
+   * try {
+   *   const isConnected = await wpApiHandler.check_connection();
+   *   if (isConnected) {
+   *     console.log('Connected to the WordPress site.');
+   *   } else {
+   *     console.log('Connection failed.');
+   *   }
+   * } catch (error) {
+   *   console.error(error.message);
+   * }
+   */
+  async check_connection(): Promise<boolean> {
+    try {
+      const response = await axios.get(
+        `${this.server_address}/wp-json/`,
+        this.headers
+      );
+  
+      if (response.status === 200) {
+        console.log('Connection successful!');
+        return true;
+      } else {
+        console.error(`Unexpected response status: ${response.status}`);
+        return false;
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ENOTFOUND') {
+          throw new InvalidURLError('Invalid URL.');
+        } else if (error.response?.data.code === 'invalid_username') {
+          throw new HeaderError('Invalid username or password.');
+        } else {
+          throw error;
+        }
+      } else {
+        console.error('An unexpected error occurred:', error);
+        return false;
+      }
     }
   }
 
