@@ -9,8 +9,7 @@ function get_config() {
         const fileContents: string = fs.readFileSync(filePath, "utf-8");
         const jsonData = JSON.parse(fileContents);
 
-        console.log("JSON data:");
-        console.log(jsonData);
+        return jsonData;
     } catch (error: any) {
             if (error.code === "ENOENT") {
                 console.error(`File not found: ${filePath}`);
@@ -21,8 +20,14 @@ function get_config() {
 }
 
 
-export function WPApiHandler_init(): boolean {
+export function test_wpa_init(): boolean {
     const config = get_config();
-    
+    const wpa = new WPApiHandler (
+        config.correct.URL,
+        config.correct.headers
+    );
+    if (!(wpa instanceof WPApiHandler)) {
+        return false;
+    }
     return true;
 }
