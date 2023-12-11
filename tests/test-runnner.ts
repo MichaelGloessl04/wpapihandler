@@ -1,32 +1,46 @@
 import chalk from "chalk";
-
 import { dummy } from "./dummy";
-import { test_wpa_init } from "./test_wpapihandler";
+import { test_wpa_init, test_wpa_check_connection } from "./test_wpapihandler";
 import { AssertionError } from "assert";
 
-
-const tests: (() => boolean)[] = [
+const tests: (() => boolean | Promise<boolean>)[] = [
     dummy,
-    test_wpa_init
+    test_wpa_init,
+    test_wpa_check_connection,
 ];
 
-
-for (const test of tests) {
-    try {        
+async function executeTest(
+        test: () => boolean | Promise<boolean>
+    ) {
+    try {
         console.log(`Executing test: ${test.name}`);
-        if (test()) {
-            console.log(chalk.green(`${test.name} executed successfully.\n`));
+        const result = await test();
+
+        if (result) {
+        console.log(chalk.green(`${test.name} executed successfully.\n`));
         } else {
-            throw new AssertionError({message: chalk.yellow(`${test.name} failed.\n`)});
+        throw new AssertionError({
+            message: chalk.yellow(`${test.name} failed.\n`),
+        });
         }
     } catch (error: any) {
-        if (error.message == `${test.name} failed.\n`) {
-            throw error;
+        if (error.message === `${test.name} failed.\n`) {
+        throw error;
         } else {
-            console.error(
-                chalk.red(`${test.name} failed with error:`, error.message, "\n")
-            );
-            throw error;
+        console.error(
+            chalk.red(`${test.name} failed with error:`, error.message, "\n")
+        );
+        throw error;
         }
     }
 }
+
+async function runTests() {
+    for (const [index, test] of tests.entries()) {
+        await executeTest(test);
+    }
+}
+
+runTests().catch((error) => {
+    console.error(chalk.red(`An unexpected error occurred:`, error));
+});

@@ -31,3 +31,16 @@ export function test_wpa_init(): boolean {
     }
     return true;
 }
+
+
+export async function test_wpa_check_connection(): Promise<boolean> {
+    const config = get_config();
+    const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
+
+    try {
+        const isConnected = await wpa.check_connection();
+        return isConnected;
+    } catch (error: any) {
+        return false;
+    }
+}
