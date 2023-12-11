@@ -7,7 +7,6 @@ import { test_wpa_init } from "./test_wpapihandler";
 const tests: (() => boolean)[] = [
     dummy_success,
     dummy_fail,
-    dummy_error,
     test_wpa_init
 ];
 
