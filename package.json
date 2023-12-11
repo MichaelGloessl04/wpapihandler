@@ -23,7 +23,7 @@
     "build": "tsup index.ts --format cjs,esm --dts",
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
-    "test": "jest"
+    "test": "ts-node tests/test-runnner.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.23.5",
@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@types/node": "^20.10.2",
-    "axios": "^1.6.2"
+    "axios": "^1.6.2",
+    "ts-node": "^10.9.2"
   }
 }

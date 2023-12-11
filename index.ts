@@ -117,7 +117,7 @@ export default class WPApiHandler {
    *   console.error(error.message);
    * }
    */
-  get_posts(id?: string): Promise<Array<Object>> {
+  get_posts(id?: string): Array<Object> {
     let total: number = this.post_len();
     if (id !== undefined) {
       return this.execute_get(`${this.server_address}/wp-json/wp/v2/posts/${id}`);
@@ -179,14 +179,14 @@ export default class WPApiHandler {
     }
   }
 
-  private async get_amount(amount: number): Promise<Array<Object>> {
+  private get_amount(amount: number): Array<Object> {
     let posts: Array<Object> = [];
     let i: number = 1;
 
     while (amount > 0) {
       const perPage: number = Math.min(amount, 100);
 
-      posts.push(await this.execute_get(
+      posts.push(this.execute_get(
         `${this.server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=100`)
       );
 
@@ -197,7 +197,7 @@ export default class WPApiHandler {
   }
 
   private execute_get(endpoint: string): Array<Object> {
-    let data;
+    let data: any;
     try {
       axios.get(endpoint, this.headers)
         .then((response) => {
