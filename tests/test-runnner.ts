@@ -17,13 +17,16 @@ for (const test of tests) {
         if (test()) {
             console.log(chalk.green(`Function ${test.name} executed successfully.\n`));
         } else {
-            console.log(chalk.yellow(`Function ${test.name} failed.\n`));
+            throw new Error(chalk.yellow(`Function ${test.name} failed.\n`));
         }
-    } catch (error) {
-        console.error(chalk.red(
-            `Function ${test.name} failed with error:`,
-            error,
-            "\n"
-        ));
+    } catch (error: any) {
+        if (error.message == `Function ${test.name} failed.\n`) {
+            throw error;
+        } else {
+            console.error(
+                chalk.red(`Function ${test.name} failed with error:`, error, "\n")
+            );
+            throw error;
+        }
     }
 }
