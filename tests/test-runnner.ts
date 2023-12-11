@@ -1,12 +1,19 @@
 import chalk from "chalk";
 import { dummy } from "./dummy";
-import { test_wpa_init, test_wpa_check_connection } from "./test_wpapihandler";
+import {
+    test_wpa_init,
+    test_wpa_check_connection,
+    test_wpa_post_len,
+    test_wpa_get_all_posts,
+} from "./test_wpapihandler";
 import { AssertionError } from "assert";
 
 const tests: (() => boolean | Promise<boolean>)[] = [
     dummy,
     test_wpa_init,
     test_wpa_check_connection,
+    test_wpa_post_len,
+    test_wpa_get_all_posts,
 ];
 
 async function executeTest(

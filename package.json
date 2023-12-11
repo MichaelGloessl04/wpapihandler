@@ -23,7 +23,8 @@
     "build": "tsup index.ts --format cjs,esm --dts",
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
-    "test": "ts-node tests/test-runnner.ts"
+    "test": "ts-node tests/test-runnner.ts",
+    "test-debug": "node --inspect-brk -r ts-node/register tests/test-runnner.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.23.5",

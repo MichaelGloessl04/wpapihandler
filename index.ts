@@ -52,18 +52,17 @@ export default class WPApiHandler {
    *   console.error(error.message);
    * }
    */
-  post_len(): number {
+  async post_len(): Promise<number> {
     try {
-      axios.get(
-        `${this.server_address}/wp-json/wp/v2/posts/`,
-        this.headers
-      ).then((response) => {
+        const response = axios.get(
+            `${this.server_address}/wp-json/wp/v2/posts/`,
+            this.headers
+        )
         return parseInt(response.headers['x-wp-total']);
-      });
-      throw new Error();
+        throw new Error();
     } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
+        console.error('Error fetching data:', error);
+        throw error;
     }
   }
 

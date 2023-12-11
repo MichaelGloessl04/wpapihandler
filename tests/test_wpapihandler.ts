@@ -37,10 +37,35 @@ export async function test_wpa_check_connection(): Promise<boolean> {
     const config = get_config();
     const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
 
-    try {
-        const isConnected = await wpa.check_connection();
-        return isConnected;
-    } catch (error: any) {
+    const isConnected = await wpa.check_connection();
+    return isConnected;
+}
+
+
+export async function test_wpa_post_len(): Promise<boolean> {
+    const config = get_config();
+    const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
+    const nr_of_posts = wpa.post_len();
+
+    if (nr_of_posts <= 0) {
+        console.error("No posts returned.");
         return false;
+    }
+    return true
+}
+
+
+export async function test_wpa_get_all_posts(): Promise<boolean> {
+    const config = get_config();
+    const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
+    const posts = wpa.get_posts();
+    if (posts.length <= 0) {
+        console.error('No posts returned.');
+        return false;
+    } else if(!Array.isArray(posts)) {
+        console.error("Wrong returned object type.");
+        return false;
+    } else {
+        return true;
     }
 }
