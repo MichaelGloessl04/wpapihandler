@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 1.0.0
+
+### Major Changes
+
+- c0e46b0: Added Documentation
+
 ## 0.2.1
 
 ### Patch Changes
