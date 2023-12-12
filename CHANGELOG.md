@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 0.2.1
+
+### Patch Changes
+
+- 6f2ed31: updated docstrings
+
 ## 0.2.0
 
 ### Minor Changes
