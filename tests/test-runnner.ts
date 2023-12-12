@@ -16,38 +16,48 @@ const tests: (() => boolean | Promise<boolean>)[] = [
     test_wpa_get_all_posts,
 ];
 
-async function executeTest(
-        test: () => boolean | Promise<boolean>
-    ) {
+async function executeTest(test: () => boolean | Promise<boolean>) {
     try {
         console.log(`Executing test: ${test.name}`);
         const result = await test();
 
         if (result) {
-        console.log(chalk.green(`${test.name} executed successfully.\n`));
+            console.log(chalk.green(`${test.name} executed successfully.\n`));
         } else {
-        throw new AssertionError({
-            message: chalk.yellow(`${test.name} failed.\n`),
-        });
+            throw new AssertionError({
+                message: chalk.yellow(`${test.name} failed.\n`),
+            });
         }
     } catch (error: any) {
         if (error.message === `${test.name} failed.\n`) {
-        throw error;
+            throw error;
         } else {
-        console.error(
-            chalk.red(`${test.name} failed with error:`, error.message, "\n")
-        );
-        throw error;
+            console.error(
+                chalk.red(`${test.name} failed with error:`, error.message, "\n")
+            );
+            throw error;
         }
     }
 }
 
-async function runTests() {
-    for (const [index, test] of tests.entries()) {
-        await executeTest(test);
+async function runTests(selectedTest?: string) {
+    if (selectedTest) {
+        const test = tests.find((t) => t.name === selectedTest);
+        if (test) {
+            await executeTest(test);
+        } else {
+            console.error(chalk.red(`Test ${selectedTest} not found.`));
+        }
+    } else {
+        for (const [index, test] of tests.entries()) {
+            await executeTest(test);
+        }
     }
 }
 
-runTests().catch((error) => {
+// Get the command-line argument for the specific test
+const selectedTest = process.argv[2];
+
+runTests(selectedTest).catch((error) => {
     console.error(chalk.red(`An unexpected error occurred:`, error));
 });

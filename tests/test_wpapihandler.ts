@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import WPApiHandler from "../index";
+import { ServerData } from "../index";
 
 
 function get_config() {
@@ -45,7 +46,7 @@ export async function test_wpa_check_connection(): Promise<boolean> {
 export async function test_wpa_post_len(): Promise<boolean> {
     const config = get_config();
     const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
-    const nr_of_posts = wpa.post_len();
+    const nr_of_posts = await wpa.post_len();
 
     if (nr_of_posts <= 0) {
         console.error("No posts returned.");
@@ -58,14 +59,26 @@ export async function test_wpa_post_len(): Promise<boolean> {
 export async function test_wpa_get_all_posts(): Promise<boolean> {
     const config = get_config();
     const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
-    const posts = wpa.get_posts();
-    if (posts.length <= 0) {
-        console.error('No posts returned.');
+    const posts: any = await wpa.get_posts();
+
+    if (posts.status !== 200) {
+        console.error("Error fetching posts:", posts.error);
         return false;
-    } else if(!Array.isArray(posts)) {
+    }
+
+    if (!Array.isArray(posts.data)) {
         console.error("Wrong returned object type.");
         return false;
-    } else {
-        return true;
     }
+
+    for (const post_collection of posts.data) {
+        for (const post of post_collection) {
+            if (typeof post !== 'object' || !post.hasOwnProperty('id')) {
+                console.error("Invalid post object:", typeof post);
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
