@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { HeaderError, InvalidURLError } from './errors/errors';
 
-
 export type ServerData = 
   | {
       status: 200,
@@ -12,14 +11,13 @@ export type ServerData =
       error: Error
     };
 
-
 interface Headers {
   'Content-Type': string,
   'Authorization': string;
   [key: string]: string;
 }
 
-export default class WPApiHandler {
+export class WPApiHandler {
   private server_address: string;
   private headers: AxiosRequestConfig;
 

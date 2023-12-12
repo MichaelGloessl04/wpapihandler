@@ -1,0 +1,5 @@
+---
+"wpapihandler": major
+---
+
+Added Documentation

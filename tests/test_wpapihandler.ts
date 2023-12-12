@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import WPApiHandler from "../index";
+import { WPApiHandler } from "../index";
 import { ServerData } from "../index";
 
 

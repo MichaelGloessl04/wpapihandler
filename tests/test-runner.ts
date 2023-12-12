@@ -55,7 +55,6 @@ async function runTests(selectedTest?: string) {
     }
 }
 
-// Get the command-line argument for the specific test
 const selectedTest = process.argv[2];
 
 runTests(selectedTest).catch((error) => {
