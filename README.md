@@ -1,9 +1,8 @@
 # Project Name
 
-[![npm version](https://badge.fury.io/js/your-package-name.svg)](https://www.npmjs.com/package/your-package-name)
-[![Build Status](https://travis-ci.com/yourusername/your-repo.svg?branch=master)](https://travis-ci.com/yourusername/your-repo)
+[![npm version](https://badge.fury.io/js/your-package-name.svg)](https://www.npmjs.com/package/wpapihandler)
 
-Short project description.
+Easy way to interact with a WordPress API. Created for personal needs but can be used implemented in other projects also.
 
 ## Installation
 
