@@ -3,7 +3,7 @@
   "author": "Michael Glössl",
   "description": "A small module to interact with the WordPress API.",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "keywords": [],
   "repository": {
     "type": "git",
