@@ -1,4 +1,4 @@
-# Project Name
+# wpapihandler
 
 [![npm version](https://badge.fury.io/js/your-package-name.svg)](https://www.npmjs.com/package/wpapihandler)
 
