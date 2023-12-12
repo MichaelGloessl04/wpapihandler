@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 1.0.5
+
+### Patch Changes
+
+- 7a8fd31: updated version number to be compatible
+
 ## 1.0.0
 
 ### Major Changes
