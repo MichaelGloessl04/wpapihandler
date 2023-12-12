@@ -1,0 +1,5 @@
+---
+"wpapihandler": patch
+---
+
+updated docstrings

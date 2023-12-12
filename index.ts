@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { HeaderError, InvalidURLError } from './errors/errors';
 
 
@@ -23,6 +23,19 @@ export default class WPApiHandler {
   private server_address: string;
   private headers: AxiosRequestConfig;
 
+  /**
+   * Creates a new instance of the WPApiHandler class.
+   *
+   * @constructor
+   * @param {string} server_address - The base server address for the WordPress site.
+   * @param {Headers} headers - The headers to be included in the HTTP requests.
+   *
+   * @example
+   * const wpa = new WPApiHandler(
+   *     'https://example.com',
+   *     { Authorization: 'Basic YOUR_ACCESS_TOKEN' }
+   * );
+   */
   constructor(server_address: string, headers: Headers) {
     const axiosHeaders: AxiosRequestConfig['headers'] = headers;
     this.server_address = server_address;
@@ -30,6 +43,17 @@ export default class WPApiHandler {
     this.check_connection();
   }
 
+  /**
+   * Fetches the total number of posts from the WordPress site.
+   *
+   * @returns {Promise<number>} A promise that resolves to the total number of posts.
+   *
+   * @throws Will throw an error if the request fails.
+   *
+   * @example
+   * const wpa = new WPApiHandler('https://example.com', { Authorization: 'Basic YOUR_ACCESS_TOKEN' });
+   * const totalPosts = await wpa.post_len();
+   */
   async post_len(): Promise<number> {
     try {
         const response = await axios.get(
@@ -43,6 +67,9 @@ export default class WPApiHandler {
     }
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   async get_events(id?: string): Promise<Object> {
     let endpoint: string = this.server_address + '/wp-json/tribe/events/v1/events/';
     if (id !== undefined) {
@@ -51,6 +78,34 @@ export default class WPApiHandler {
     return await this.execute_get(endpoint);
   }
 
+  /**
+   * Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
+   *
+   * @async
+   * @param {string} [id] - The ID of a specific post to retrieve. If not provided, retrieves all posts.
+   * @returns {Promise<ServerData>} A promise that resolves to an object containing the status and data/error of the request.
+   * @throws {Error} If an unexpected error occurs during the execution of the method.
+   *
+   * @example
+   * const wpa = new WPApiHandler(
+   *     'https://example.com',
+   *     { Authorization: 'Basic YOUR_ACCESS_TOKEN' }
+   * );
+   *
+   * // Retrieves all posts
+   * const result = await wpa.get_posts(); 
+   * console.log(result.status, result.data);
+   *
+   * // Alternatively, to retrieve a specific post
+   * const specificPost = await wpa.get_posts('postId');
+   * console.log(specificPost.status, specificPost.data);
+   * 
+   * // If an an error occurs during the GET Request
+   * non_existent_post_id = 0;
+   * const errorPost = await wpa.get_posts(non_existent_post_id);
+   * console.error(errorPost.status, specificPost.error);
+   * 
+   */
   async get_posts(id?: string): Promise<ServerData> {
     let total: number = await this.post_len();
     if (id !== undefined) {
@@ -73,6 +128,32 @@ export default class WPApiHandler {
     }
   }
 
+  /**
+   * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
+   *
+   * @async
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
+   * @throws {InvalidURLError} If the URL is invalid.
+   * @throws {HeaderError} If there is an issue with the headers, such as an invalid username or password.
+   * @throws {Error} If an unexpected error occurs during the execution of the method.
+   *
+   * @example
+   * const wpa = new WPApiHandler(
+   *     'https://example.com',
+   *     { Authorization: 'Basic YOUR_ACCESS_TOKEN' }
+   * );
+   *
+   * try {
+   *   const isConnected = await wpa.check_connection();
+   *   if (isConnected) {
+   *     console.log('Connected to the WordPress site.');
+   *   } else {
+   *     console.log('Connection failed.');
+   *   }
+   * } catch (error) {
+   *   console.error(error.message);
+   * }
+   */
   async check_connection(): Promise<boolean> {
     try {
       const response = await axios.get(
