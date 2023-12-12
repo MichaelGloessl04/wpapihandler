@@ -1,5 +1,17 @@
 # wpapihandler
 
+## 0.2.0
+
+### Minor Changes
+
+- fe457fe: implemented new return type for get requests
+
+### Patch Changes
+
+- 8e1847e: feature: added a check_connection methode to make sure the given parameters are valid.
+- 16d2730: fix: added some jest tests
+- fe457fe: fixed get_posts
+
 ## 0.1.0
 
 ### Minor Changes
