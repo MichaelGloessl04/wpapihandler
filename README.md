@@ -1,6 +1,6 @@
 # wpapihandler
 
-[![npm version](https://badge.fury.io/js/your-package-name.svg)](https://www.npmjs.com/package/wpapihandler)
+[![npm version](https://badge.fury.io/js/wpapihandler.svg)](https://www.npmjs.com/package/wpapihandler)
 
 Easy way to interact with a WordPress API. Created for personal needs but can be used implemented in other projects also.
 
