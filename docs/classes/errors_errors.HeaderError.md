@@ -50,7 +50,7 @@ Error.constructor
 
 #### Defined in
 
-[errors/errors.ts:9](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/errors/errors.ts#L9)
+[errors/errors.ts:9](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/errors/errors.ts#L9)
 
 ## Properties
 

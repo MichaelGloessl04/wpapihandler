@@ -57,7 +57,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:40](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L40)
+[index.ts:40](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L40)
 
 ## Properties
 
@@ -67,7 +67,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:22](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L22)
+[index.ts:22](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L22)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[index.ts:21](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L21)
+[index.ts:21](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L21)
 
 ## Methods
 
@@ -97,15 +97,15 @@ A promise that resolves to `true` if the connection is successful, and `false` o
 
 **`Throws`**
 
-InvalidURLError If the URL is invalid.
+InvalidURLError if the URL is invalid.
 
 **`Throws`**
 
-HeaderError If there is an issue with the headers, such as an invalid username or password.
+HeaderError if there is an issue with the headers, such as an invalid username or password.
 
 **`Throws`**
 
-Error If an unexpected error occurs during the execution of the method.
+Error if an unexpected error occurs during the execution of the method.
 
 **`Example`**
 
@@ -132,7 +132,7 @@ try {
 
 #### Defined in
 
-[index.ts:171](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L171)
+[index.ts:171](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L171)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[index.ts:230](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L230)
+[index.ts:230](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L230)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[index.ts:201](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L201)
+[index.ts:201](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L201)
 
 ___
 
@@ -196,7 +196,7 @@ The method should not be used
 
 #### Defined in
 
-[index.ts:80](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L80)
+[index.ts:80](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L80)
 
 ___
 
@@ -222,7 +222,7 @@ A promise that resolves to an object containing the status and data/error of the
 
 **`Throws`**
 
-Error If an unexpected error occurs during the execution of the method.
+Error if an unexpected error occurs during the execution of the method.
 
 **`Example`**
 
@@ -251,7 +251,7 @@ console.error(errorPost.status, specificPost.error);
 
 #### Defined in
 
-[index.ts:120](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L120)
+[index.ts:120](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L120)
 
 ___
 
@@ -269,7 +269,7 @@ A promise that resolves to the total number of posts.
 
 **`Throws`**
 
-Will throw an error if the request fails.
+Error if the request fails.
 
 **`Example`**
 
@@ -286,4 +286,4 @@ const totalPosts = await wpa.post_len();
 
 #### Defined in
 
-[index.ts:64](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L64)
+[index.ts:64](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L64)

@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { HeaderError, InvalidURLError } from './errors/errors';
+import { InvalidURLError, HeaderError } from './errors/errors';
 
 export type ServerData =
     | {
@@ -49,7 +49,7 @@ export class WPApiHandler {
      *
      * @returns {Promise<number>} A promise that resolves to the total number of posts.
      *
-     * @throws Will throw an error if the request fails.
+     * @throws {@link Error} if the request fails.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -92,7 +92,7 @@ export class WPApiHandler {
      * @async
      * @param {string} [id] - The ID of a specific post to retrieve. If not provided, retrieves all posts.
      * @returns {Promise<ServerData>} A promise that resolves to an object containing the status and data/error of the request.
-     * @throws {@link Error} If an unexpected error occurs during the execution of the method.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -144,9 +144,9 @@ export class WPApiHandler {
      *
      * @async
      * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
-     * @throws {@link InvalidURLError} If the URL is invalid.
-     * @throws {@link HeaderError} If there is an issue with the headers, such as an invalid username or password.
-     * @throws {@link Error} If an unexpected error occurs during the execution of the method.
+     * @throws {@link InvalidURLError} if the URL is invalid.
+     * @throws {@link HeaderError} if there is an issue with the headers, such as an invalid username or password.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(

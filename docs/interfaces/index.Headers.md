@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[index.ts:16](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L16)
+[index.ts:16](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L16)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[index.ts:15](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L15)
+[index.ts:15](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L15)
