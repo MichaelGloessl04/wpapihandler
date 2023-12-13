@@ -85,3 +85,28 @@ export async function test_wpa_get_all_posts(): Promise<boolean> {
 
     return true;
 }
+
+
+export async function test_wpa_post_post(): Promise<boolean> {
+    const config = get_config();
+    const wpa = new WPApiHandler(config.correct.URL, config.correct.headers);
+    const new_post = {
+        title: "Test post",
+        content: "This is a test post.",
+        status: "publish",
+    };
+
+    const response: any = await wpa.post_post(new_post);
+    if (response.status !== 200) {
+        console.error("Error posting data:", response.error);
+        return false;
+    }else if (typeof response.data !== 'object' || !response.data.hasOwnProperty('id')) {
+        console.error("Invalid post object:", typeof response.data);
+        return false;
+    }else if (response.data.title.rendered !== new_post.title) {
+        console.error(`Post title is ${response.data.title.rendered}, expected ${new_post.title}.`);
+        return false;
+    }
+
+    return true;
+}
