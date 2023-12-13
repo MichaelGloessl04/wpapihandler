@@ -23,6 +23,7 @@
 - [get\_events](index.WPApiHandler.md#get_events)
 - [get\_posts](index.WPApiHandler.md#get_posts)
 - [post\_len](index.WPApiHandler.md#post_len)
+- [post\_post](index.WPApiHandler.md#post_post)
 
 ## Constructors
 
@@ -57,7 +58,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:40](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L40)
+[index.ts:46](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L46)
 
 ## Properties
 
@@ -67,7 +68,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:22](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L22)
+[index.ts:28](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L28)
 
 ___
 
@@ -77,7 +78,7 @@ ___
 
 #### Defined in
 
-[index.ts:21](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L21)
+[index.ts:27](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L27)
 
 ## Methods
 
@@ -132,7 +133,7 @@ try {
 
 #### Defined in
 
-[index.ts:171](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L171)
+[index.ts:220](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L220)
 
 ___
 
@@ -152,7 +153,7 @@ ___
 
 #### Defined in
 
-[index.ts:230](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L230)
+[index.ts:277](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L277)
 
 ___
 
@@ -172,7 +173,7 @@ ___
 
 #### Defined in
 
-[index.ts:201](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L201)
+[index.ts:248](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L248)
 
 ___
 
@@ -196,7 +197,7 @@ The method should not be used
 
 #### Defined in
 
-[index.ts:80](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L80)
+[index.ts:86](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L86)
 
 ___
 
@@ -251,7 +252,7 @@ console.error(errorPost.status, specificPost.error);
 
 #### Defined in
 
-[index.ts:120](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L120)
+[index.ts:126](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L126)
 
 ___
 
@@ -286,4 +287,53 @@ const totalPosts = await wpa.post_len();
 
 #### Defined in
 
-[index.ts:64](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L64)
+[index.ts:70](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L70)
+
+___
+
+### post\_post
+
+▸ **post_post**(`new_post?`): `Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+
+Asynchronously posts a new post to the WordPress site.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `new_post?` | [`Post`](../modules/index.md#post) | The post to be posted to the WordPress site. |
+
+#### Returns
+
+`Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+
+A promise that resolves to an object containing the status and data/error of the request.
+
+**`Throws`**
+
+Error if an unexpected error occurs during the execution of the method.
+
+**`Example`**
+
+```ts
+const wpa = new WPApiHandler(
+     'https://example.com',
+     {
+         "Content-Type": "application/json",
+         "Authorization": "Basic YOURACCESSTOKEN"
+     }
+);
+
+const new_post = {
+     title: 'New Post',
+     content: 'This is a new post.',
+     status: 'publish',
+};
+
+const result = await wpa.post_post(new_post);
+console.log(result.status, result.data);
+```
+
+#### Defined in
+
+[index.ts:172](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L172)

@@ -5,6 +5,7 @@ import {
     test_wpa_check_connection,
     test_wpa_post_len,
     test_wpa_get_all_posts,
+    test_wpa_post_post,
 } from "./test_wpapihandler";
 import { AssertionError } from "assert";
 
@@ -14,6 +15,7 @@ const tests: (() => boolean | Promise<boolean>)[] = [
     test_wpa_check_connection,
     test_wpa_post_len,
     test_wpa_get_all_posts,
+    test_wpa_post_post,
 ];
 
 async function executeTest(test: () => boolean | Promise<boolean>) {

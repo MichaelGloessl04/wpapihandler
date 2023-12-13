@@ -14,9 +14,28 @@
 
 ### Type Aliases
 
+- [Post](index.md#post)
 - [ServerData](index.md#serverdata)
 
 ## Type Aliases
+
+### Post
+
+Ƭ **Post**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `content` | `string` |
+| `status` | `string` |
+| `title` | `string` |
+
+#### Defined in
+
+[index.ts:14](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L14)
+
+___
 
 ### ServerData
 
@@ -24,4 +43,4 @@
 
 #### Defined in
 
-[index.ts:4](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L4)
+[index.ts:4](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L4)

@@ -11,6 +11,13 @@ export type ServerData =
           error: Error;
       };
 
+export type Post = {
+    title: string;
+    content: string;
+    status: string;
+    [key: string]: any;
+};
+
 export interface Headers {
     'Content-Type': string;
     Authorization: string;
@@ -126,7 +133,7 @@ export class WPApiHandler {
             if (response[0] == 200) {
                 return {
                     status: 200,
-                    data: [response[2]],
+                    data: response[2],
                 };
             } else {
                 return {
@@ -136,6 +143,49 @@ export class WPApiHandler {
             }
         } else {
             return await this.get_amount(total);
+        }
+    }
+
+    /**
+     * Asynchronously posts a new post to the WordPress site.
+     *
+     * @param {Post} [new_post]: The post to be posted to the WordPress site.
+     * @returns {Promise<ServerData>} A promise that resolves to an object containing the status and data/error of the request.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     * 
+     * const new_post = {
+     *      title: 'New Post',
+     *      content: 'This is a new post.',
+     *      status: 'publish',
+     * };
+     * 
+     * const result = await wpa.post_post(new_post);
+     * console.log(result.status, result.data);
+     */
+    async post_post(new_post: Post): Promise<ServerData> {
+        try {
+            const response = await axios.post(
+                `${this.server_address}/wp-json/wp/v2/posts/`,
+                new_post,
+                this.headers,
+            );
+            return {
+                status: 200,
+                data: response.data,
+            };
+        } catch (error: any) {
+            return {
+                status: error.response.status,
+                error: Error(error.response.statusText),
+            };
         }
     }
 
@@ -176,10 +226,8 @@ export class WPApiHandler {
             );
 
             if (response.status === 200) {
-                console.log('Connection successful!');
                 return true;
             } else {
-                console.error(`Unexpected response status: ${response.status}`);
                 return false;
             }
         } catch (error) {
