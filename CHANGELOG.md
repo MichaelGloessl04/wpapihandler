@@ -1,5 +1,12 @@
 # wpapihandler
 
+## 1.0.6
+
+### Patch Changes
+
+- eb6a31b: fixed error types not showing in docs
+- 92ff720: new method called post_post to add posts to the server.
+
 ## 1.0.5
 
 ### Patch Changes
