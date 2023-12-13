@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[index.ts:4](https://github.com/MichaelGloessl04/wpapihandler/blob/d3af325/index.ts#L4)
+[index.ts:4](https://github.com/MichaelGloessl04/wpapihandler/blob/e0b843b/index.ts#L4)

@@ -11,10 +11,3 @@ export class HeaderError extends Error {
         Object.setPrototypeOf(this, HeaderError.prototype);
     }
 }
-
-export class AssertionError extends Error {
-  constructor(message: string) {
-    super(message);
-    Object.setPrototypeOf(this, HeaderError.prototype);
-  }
-}

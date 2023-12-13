@@ -6,6 +6,5 @@
 
 ### Classes
 
-- [AssertionError](../classes/errors_errors.AssertionError.md)
 - [HeaderError](../classes/errors_errors.HeaderError.md)
 - [InvalidURLError](../classes/errors_errors.InvalidURLError.md)
