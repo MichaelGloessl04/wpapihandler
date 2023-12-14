@@ -71,7 +71,7 @@ export class WPApiHandler {
     async post_len(): Promise<number> {
         try {
             const response = await axios.get(
-                `${this.server_address}/wp-json/wp/v2/posts/`,
+                `${this.server_address}/index.php/wp-json/wp/v2/posts/`,
                 this.headers,
             );
             return parseInt(response.headers['x-wp-total']);
@@ -86,7 +86,7 @@ export class WPApiHandler {
      */
     async get_events(id?: string): Promise<Object> {
         let endpoint: string =
-            this.server_address + '/wp-json/tribe/events/v1/events/';
+            this.server_address + '/index.php/wp-json/tribe/events/v1/events/';
         if (id !== undefined) {
             endpoint += id;
         }
@@ -128,7 +128,7 @@ export class WPApiHandler {
         let total: number = await this.post_len();
         if (id !== undefined) {
             let response: any = await this.execute_get(
-                `${this.server_address}/wp-json/wp/v2/posts/${id}`,
+                `${this.server_address}/index.php/wp-json/wp/v2/posts/${id}`,
             );
             if (response[0] == 200) {
                 return {
@@ -173,7 +173,7 @@ export class WPApiHandler {
     async post_post(new_post: Post): Promise<ServerData> {
         try {
             const response = await axios.post(
-                `${this.server_address}/wp-json/wp/v2/posts/`,
+                `${this.server_address}/index.php/wp-json/wp/v2/posts/`,
                 new_post,
                 this.headers,
             );
@@ -221,7 +221,7 @@ export class WPApiHandler {
     async check_connection(): Promise<boolean> {
         try {
             const response = await axios.get(
-                `${this.server_address}/wp-json/`,
+                `${this.server_address}/index.php/wp-json/`,
                 this.headers,
             );
 
@@ -256,7 +256,7 @@ export class WPApiHandler {
             let response: any = await this.execute_get(
                 `${
                     this.server_address
-                }/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
+                }/index.php/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
             );
             if (response[0] == 200) {
                 posts.push(response[2]);

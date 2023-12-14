@@ -25,10 +25,7 @@ export function test_wpa_init(): boolean {
     const config = get_config();
     const wpa = new WPApiHandler (
         config.correct.URL,
-        { 
-            "Content-Type": "application/json",
-            "Authorization": "Basic dnVlX2pzOnJYaFcgbGg2cSB3dXV2IGQzQzUgSUtyWCBZTWtJ" 
-        }
+        config.correct.headers,
     );
     if (!(wpa instanceof WPApiHandler)) {
         return false;
