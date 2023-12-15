@@ -15,6 +15,7 @@ export type Post = {
     title: string;
     content: string;
     status: string;
+    category: string;
     [key: string]: any;
 };
 
