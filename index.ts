@@ -52,6 +52,63 @@ export class WPApiHandler {
     }
 
     /**
+     * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
+     *
+     * @async
+     * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
+     * @throws {@link InvalidURLError} if the URL is invalid.
+     * @throws {@link HeaderError} if there is an issue with the headers, such as an invalid username or password.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * try {
+     *      const isConnected = await wpa.check_connection();
+     *      if (isConnected) {
+     *          console.log('Connected to the WordPress site.');
+     *      } else {
+     *          console.log('Connection failed.');
+     *      }
+     * } catch (error) {
+     *      console.error(error.message);
+     * }
+     */
+    async check_connection(): Promise<boolean> {
+        try {
+            const response = await axios.get(
+                `${this.server_address}/wp-json/`,
+                this.headers,
+            );
+
+            if (response.status === 200) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.code === 'ENOTFOUND') {
+                    throw new InvalidURLError('Invalid URL.');
+                } else if (error.response?.data.code === 'invalid_username') {
+                    throw new HeaderError('Invalid username or password.');
+                } else {
+                    throw error;
+                }
+            } else {
+                console.error('An unexpected error occurred:', error);
+                return false;
+            }
+        }
+    }
+
+    /**
      * Fetches the total number of posts from the WordPress site.
      *
      * @returns {Promise<number>} A promise that resolves to the total number of posts.
@@ -71,7 +128,7 @@ export class WPApiHandler {
     async post_len(): Promise<number> {
         try {
             const response = await axios.get(
-                `${this.server_address}/index.php/wp-json/wp/v2/posts/`,
+                `${this.server_address}/wp-json/wp/v2/posts/`,
                 this.headers,
             );
             return parseInt(response.headers['x-wp-total']);
@@ -86,7 +143,7 @@ export class WPApiHandler {
      */
     async get_events(id?: string): Promise<Object> {
         let endpoint: string =
-            this.server_address + '/index.php/wp-json/tribe/events/v1/events/';
+            this.server_address + '/wp-json/tribe/events/v1/events/';
         if (id !== undefined) {
             endpoint += id;
         }
@@ -128,7 +185,7 @@ export class WPApiHandler {
         let total: number = await this.post_len();
         if (id !== undefined) {
             let response: any = await this.execute_get(
-                `${this.server_address}/index.php/wp-json/wp/v2/posts/${id}`,
+                `${this.server_address}/wp-json/wp/v2/posts/${id}`,
             );
             if (response[0] == 200) {
                 return {
@@ -160,20 +217,20 @@ export class WPApiHandler {
      *          "Authorization": "Basic YOURACCESSTOKEN"
      *      }
      * );
-     * 
+     *
      * const new_post = {
      *      title: 'New Post',
      *      content: 'This is a new post.',
      *      status: 'publish',
      * };
-     * 
+     *
      * const result = await wpa.post_post(new_post);
      * console.log(result.status, result.data);
      */
     async post_post(new_post: Post): Promise<ServerData> {
         try {
             const response = await axios.post(
-                `${this.server_address}/index.php/wp-json/wp/v2/posts/`,
+                `${this.server_address}/wp-json/wp/v2/posts/`,
                 new_post,
                 this.headers,
             );
@@ -189,63 +246,6 @@ export class WPApiHandler {
         }
     }
 
-    /**
-     * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
-     *
-     * @async
-     * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
-     * @throws {@link InvalidURLError} if the URL is invalid.
-     * @throws {@link HeaderError} if there is an issue with the headers, such as an invalid username or password.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
-     *
-     * @example
-     * const wpa = new WPApiHandler(
-     *      'https://example.com',
-     *      {
-     *          "Content-Type": "application/json",
-     *          "Authorization": "Basic YOURACCESSTOKEN"
-     *      }
-     * );
-     *
-     * try {
-     *      const isConnected = await wpa.check_connection();
-     *      if (isConnected) {
-     *          console.log('Connected to the WordPress site.');
-     *      } else {
-     *          console.log('Connection failed.');
-     *      }
-     * } catch (error) {
-     *      console.error(error.message);
-     * }
-     */
-    async check_connection(): Promise<boolean> {
-        try {
-            const response = await axios.get(
-                `${this.server_address}/index.php/wp-json/`,
-                this.headers,
-            );
-
-            if (response.status === 200) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ENOTFOUND') {
-                    throw new InvalidURLError('Invalid URL.');
-                } else if (error.response?.data.code === 'invalid_username') {
-                    throw new HeaderError('Invalid username or password.');
-                } else {
-                    throw error;
-                }
-            } else {
-                console.error('An unexpected error occurred:', error);
-                return false;
-            }
-        }
-    }
-
     private async get_amount(amount: number): Promise<ServerData> {
         let posts: Array<Object> = [];
         let i: number = 1;
@@ -256,7 +256,7 @@ export class WPApiHandler {
             let response: any = await this.execute_get(
                 `${
                     this.server_address
-                }/index.php/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
+                }/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
             );
             if (response[0] == 200) {
                 posts.push(response[2]);
