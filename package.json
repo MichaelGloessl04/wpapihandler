@@ -24,7 +24,7 @@
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
     "docs": "typedoc --plugin typedoc-plugin-markdown --out docs index.ts errors/errors.ts",
-    "test": "ts-node tests/test-runner.ts",
+    "test": "jest",
     "prettier-format": "prettier --config .prettierrc index.ts --write"
   },
   "devDependencies": {
