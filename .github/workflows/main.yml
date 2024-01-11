@@ -28,7 +28,8 @@ jobs:
       - name: Run tests
         run: pnpm run test
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          LOGIN: ${{ secrets.LOGIN }}
+          PASSWORD: ${{ secrets.PASSWORD }}
 
       - name: Lint and build
         run: pnpm run lint && pnpm run build
