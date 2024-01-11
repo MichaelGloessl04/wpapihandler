@@ -1,10 +1,11 @@
-[wpapihandler](README.md) / Modules
+[wpapihandler](README.md) / Exports
 
 # wpapihandler
 
 ## Table of contents
 
-### Modules
+### Classes
 
-- [errors/errors](modules/errors_errors.md)
-- [index](modules/index.md)
+- [HeaderError](classes/HeaderError.md)
+- [InvalidURLError](classes/InvalidURLError.md)
+- [WPApiHandler](classes/WPApiHandler.md)

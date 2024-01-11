@@ -1,38 +1,36 @@
-[wpapihandler](../README.md) / [Modules](../modules.md) / [errors/errors](../modules/errors_errors.md) / HeaderError
+[wpapihandler](../README.md) / [Exports](../modules.md) / InvalidURLError
 
-# Class: HeaderError
-
-[errors/errors](../modules/errors_errors.md).HeaderError
+# Class: InvalidURLError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`HeaderError`**
+  ↳ **`InvalidURLError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](errors_errors.HeaderError.md#constructor)
+- [constructor](InvalidURLError.md#constructor)
 
 ### Properties
 
-- [message](errors_errors.HeaderError.md#message)
-- [name](errors_errors.HeaderError.md#name)
-- [stack](errors_errors.HeaderError.md#stack)
-- [prepareStackTrace](errors_errors.HeaderError.md#preparestacktrace)
-- [stackTraceLimit](errors_errors.HeaderError.md#stacktracelimit)
+- [message](InvalidURLError.md#message)
+- [name](InvalidURLError.md#name)
+- [stack](InvalidURLError.md#stack)
+- [prepareStackTrace](InvalidURLError.md#preparestacktrace)
+- [stackTraceLimit](InvalidURLError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](errors_errors.HeaderError.md#capturestacktrace)
+- [captureStackTrace](InvalidURLError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new HeaderError**(`message`): [`HeaderError`](errors_errors.HeaderError.md)
+• **new InvalidURLError**(`message`): [`InvalidURLError`](InvalidURLError.md)
 
 #### Parameters
 
@@ -42,7 +40,7 @@
 
 #### Returns
 
-[`HeaderError`](errors_errors.HeaderError.md)
+[`InvalidURLError`](InvalidURLError.md)
 
 #### Overrides
 
@@ -50,7 +48,7 @@ Error.constructor
 
 #### Defined in
 
-[errors/errors.ts:9](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/errors/errors.ts#L9)
+src/errors/errors.ts:2
 
 ## Properties
 

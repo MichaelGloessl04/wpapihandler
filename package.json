@@ -20,11 +20,11 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "tsup index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
-    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs index.ts errors/errors.ts",
-    "test": "ts-node tests/test-runner.ts",
+    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs src",
+    "test": "jest",
     "prettier-format": "prettier --config .prettierrc index.ts --write"
   },
   "devDependencies": {
@@ -45,7 +45,9 @@
   "dependencies": {
     "@types/node": "^20.10.2",
     "axios": "^1.6.2",
+    "btoa": "^1.2.1",
     "chalk": "^4.1.2",
+    "dotenv": "^16.3.1",
     "ts-node": "^10.9.2"
   }
 }
