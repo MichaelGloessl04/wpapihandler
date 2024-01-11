@@ -1,6 +1,6 @@
-import { WPApiHandler, ServerData } from '../src/index';
+import { Post, WPResponse } from '../src/types/types';
+import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
-import {  } from '../src/wpapihandler';
 
 require('dotenv').config();
 
@@ -17,13 +17,10 @@ describe('WPApiHandler', () => {
 
   describe('post_len', () => {
     it('should return the total number of posts', async () => {
-      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
 
-      // Act
       const totalPosts = await wpa.post_len();
 
-      // Assert
       expect(totalPosts).toBeGreaterThan(0);
     });
   });
@@ -33,12 +30,15 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const posts: any = await wpa.get_posts();
+        const posts: WPResponse = await wpa.get_posts();
 
         expect(posts.status).toEqual(200);
 
         expect(posts).toHaveProperty('data');
-        expect(posts.data).toBeInstanceOf(Array);
+        expect(posts.data).toMatchObject<Post>({
+          title: expect.any(String),
+          content: expect.any(String),
+          status: expect.any(String) });
         expect(posts.data.length).toBeGreaterThan(0);
       } catch (error) {
         fail(error);
@@ -49,11 +49,11 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const post: any = await wpa.get_posts('291');
+        const post: WPResponse = await wpa.get_posts('291');
 
         expect(post.status).toEqual(200);
 
-        expect(post).toHaveProperty('data');
+        expect(post).toHaveProperty('posts');
         expect(post.data).toBeInstanceOf(Object);
         expect(post.data).toHaveProperty('id');
         expect(post.data.id).toEqual(291);

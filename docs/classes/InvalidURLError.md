@@ -48,7 +48,7 @@ Error.constructor
 
 #### Defined in
 
-src/errors/errors.ts:2
+[src/errors/errors.ts:2](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/errors/errors.ts#L2)
 
 ## Properties
 

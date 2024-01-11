@@ -1,28 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { InvalidURLError, HeaderError } from './errors/errors';
+import { Headers, Post, WPResponse } from './types/types';
 
-export type ServerData =
-    | {
-          status: 200;
-          data: Array<Object>;
-      }
-    | {
-          status: number;
-          error: Error;
-      };
-
-export type Post = {
-    title: string;
-    content: string;
-    status: string;
-    [key: string]: any;
-};
-
-export interface Headers {
-    'Content-Type': string;
-    Authorization: string;
-    [key: string]: string;
-}
 
 export class WPApiHandler {
     private server_address: string;
@@ -86,7 +65,7 @@ export class WPApiHandler {
      *
      * @async
      * @param {string} [id] - The ID of a specific post to retrieve. If not provided, retrieves all posts.
-     * @returns {Promise<ServerData>} A promise that resolves to an object containing the status and data/error of the request.
+     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
      * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
@@ -112,7 +91,7 @@ export class WPApiHandler {
      * console.error(errorPost.status, specificPost.error);
      *
      */
-    async get_posts(id?: string): Promise<ServerData> {
+    async get_posts(id?: string): Promise<WPResponse> {
         let total: number = await this.post_len();
         if (id !== undefined) {
             let response: AxiosResponse = await axios.get(
@@ -120,9 +99,14 @@ export class WPApiHandler {
                 this.headers
             );
             if (response.status == 200) {
+                let post: Post = {
+                    title: response.data.title.rendered,
+                    content: response.data.content.rendered,
+                    status: response.data.status,
+                };
                 return {
                     status: 200,
-                    data: response.data,
+                    posts: post,
                 };
             } else {
                 return {
@@ -139,7 +123,7 @@ export class WPApiHandler {
      * Asynchronously posts a new post to the WordPress site.
      *
      * @param {Post} [new_post]: The post to be posted to the WordPress site.
-     * @returns {Promise<ServerData>} A promise that resolves to an object containing the status and data/error of the request.
+     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
      * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      * @example
      * const wpa = new WPApiHandler(
@@ -159,7 +143,7 @@ export class WPApiHandler {
      * const result = await wpa.post_post(new_post);
      * console.log(result.status, result.data);
      */
-    async post_post(new_post: Post): Promise<ServerData> {
+    async post_post(new_post: Post): Promise<WPResponse> {
         try {
             const response = await axios.post(
                 `${this.server_address}/wp-json/wp/v2/posts/`,
@@ -168,7 +152,7 @@ export class WPApiHandler {
             );
             return {
                 status: 200,
-                data: response.data,
+                response: response.data,
             };
         } catch (error: any) {
             return {
@@ -235,8 +219,8 @@ export class WPApiHandler {
         }
     }
 
-    private async get_amount(amount: number): Promise<ServerData> {
-        let posts: Array<Object> = [];
+    private async get_amount(amount: number): Promise<WPResponse> {
+        let posts: Array<Post> = [];
         let i: number = 1;
 
         while (amount > 0) {
@@ -247,7 +231,14 @@ export class WPApiHandler {
                 this.headers,
             );
             if (response.status == 200) {
-                posts.push(response.data);
+                response.data.forEach((post: any) => {
+                    let current_post: Post = {
+                        title: post.title.rendered,
+                        content: post.content.rendered,
+                        status: post.status,
+                        };
+                    posts.push(current_post);
+                });
             } else {
                 return {
                     status: response.status,
@@ -259,7 +250,7 @@ export class WPApiHandler {
 
         return {
             status: 200,
-            data: posts,
+            posts: posts,
         };
     }
 }
