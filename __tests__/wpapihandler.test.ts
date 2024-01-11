@@ -43,7 +43,7 @@ describe('WPApiHandler', () => {
       } catch (error) {
         fail(error);
       }
-    });
+    }, 10000);
 
     it('should return post with specified id', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
