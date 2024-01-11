@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { InvalidURLError, HeaderError } from './errors/errors';
 
 export type ServerData =
@@ -82,18 +82,6 @@ export class WPApiHandler {
     }
 
     /**
-     * @deprecated The method should not be used
-     */
-    async get_events(id?: string): Promise<Object> {
-        let endpoint: string =
-            this.server_address + '/wp-json/tribe/events/v1/events/';
-        if (id !== undefined) {
-            endpoint += id;
-        }
-        return await this.execute_get(endpoint);
-    }
-
-    /**
      * Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
      *
      * @async
@@ -127,18 +115,19 @@ export class WPApiHandler {
     async get_posts(id?: string): Promise<ServerData> {
         let total: number = await this.post_len();
         if (id !== undefined) {
-            let response: any = await this.execute_get(
+            let response: AxiosResponse = await axios.get(
                 `${this.server_address}/wp-json/wp/v2/posts/${id}`,
+                this.headers
             );
-            if (response[0] == 200) {
+            if (response.status == 200) {
                 return {
                     status: 200,
-                    data: response[2],
+                    data: response.data,
                 };
             } else {
                 return {
-                    status: response[0],
-                    error: Error(response[1]),
+                    status: response.status,
+                    error: Error(response.statusText),
                 };
             }
         } else {
@@ -160,13 +149,13 @@ export class WPApiHandler {
      *          "Authorization": "Basic YOURACCESSTOKEN"
      *      }
      * );
-     * 
+     *
      * const new_post = {
      *      title: 'New Post',
      *      content: 'This is a new post.',
      *      status: 'publish',
      * };
-     * 
+     *
      * const result = await wpa.post_post(new_post);
      * console.log(result.status, result.data);
      */
@@ -253,17 +242,16 @@ export class WPApiHandler {
         while (amount > 0) {
             const perPage: number = Math.min(amount, 100);
 
-            let response: any = await this.execute_get(
-                `${
-                    this.server_address
-                }/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
+            let response: AxiosResponse = await axios.get(
+                `${this.server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
+                this.headers,
             );
-            if (response[0] == 200) {
-                posts.push(response[2]);
+            if (response.status == 200) {
+                posts.push(response.data);
             } else {
                 return {
-                    status: response[0],
-                    error: Error(response[1]),
+                    status: response.status,
+                    error: Error(response.statusText),
                 };
             }
             amount -= perPage;
@@ -271,17 +259,7 @@ export class WPApiHandler {
 
         return {
             status: 200,
-            data: [...posts],
+            data: posts,
         };
-    }
-
-    private async execute_get(endpoint: string): Promise<Array<Object>> {
-        try {
-            const response = await axios.get(endpoint, this.headers);
-            return [response.status, response.statusText, response.data];
-        } catch (error: any) {
-            console.error('Error:', error.message);
-            throw error;
-        }
     }
 }

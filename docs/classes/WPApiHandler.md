@@ -1,35 +1,33 @@
-[wpapihandler](../README.md) / [Modules](../modules.md) / [index](../modules/index.md) / WPApiHandler
+[wpapihandler](../README.md) / [Exports](../modules.md) / WPApiHandler
 
 # Class: WPApiHandler
-
-[index](../modules/index.md).WPApiHandler
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](index.WPApiHandler.md#constructor)
+- [constructor](WPApiHandler.md#constructor)
 
 ### Properties
 
-- [headers](index.WPApiHandler.md#headers)
-- [server\_address](index.WPApiHandler.md#server_address)
+- [headers](WPApiHandler.md#headers)
+- [server\_address](WPApiHandler.md#server_address)
 
 ### Methods
 
-- [check\_connection](index.WPApiHandler.md#check_connection)
-- [execute\_get](index.WPApiHandler.md#execute_get)
-- [get\_amount](index.WPApiHandler.md#get_amount)
-- [get\_events](index.WPApiHandler.md#get_events)
-- [get\_posts](index.WPApiHandler.md#get_posts)
-- [post\_len](index.WPApiHandler.md#post_len)
-- [post\_post](index.WPApiHandler.md#post_post)
+- [check\_connection](WPApiHandler.md#check_connection)
+- [execute\_get](WPApiHandler.md#execute_get)
+- [get\_amount](WPApiHandler.md#get_amount)
+- [get\_events](WPApiHandler.md#get_events)
+- [get\_posts](WPApiHandler.md#get_posts)
+- [post\_len](WPApiHandler.md#post_len)
+- [post\_post](WPApiHandler.md#post_post)
 
 ## Constructors
 
 ### constructor
 
-• **new WPApiHandler**(`server_address`, `headers`): [`WPApiHandler`](index.WPApiHandler.md)
+• **new WPApiHandler**(`server_address`, `headers`): [`WPApiHandler`](WPApiHandler.md)
 
 Creates a new instance of the WPApiHandler class.
 
@@ -38,11 +36,11 @@ Creates a new instance of the WPApiHandler class.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `server_address` | `string` | The base server address for the WordPress site. |
-| `headers` | [`Headers`](../interfaces/index.Headers.md) | The headers to be included in the HTTP requests. |
+| `headers` | `Headers` | The headers to be included in the HTTP requests. |
 
 #### Returns
 
-[`WPApiHandler`](index.WPApiHandler.md)
+[`WPApiHandler`](WPApiHandler.md)
 
 **`Example`**
 
@@ -58,7 +56,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:46](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L46)
+src/wpapihandler.ts:47
 
 ## Properties
 
@@ -68,7 +66,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-[index.ts:28](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L28)
+src/wpapihandler.ts:29
 
 ___
 
@@ -78,7 +76,7 @@ ___
 
 #### Defined in
 
-[index.ts:27](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L27)
+src/wpapihandler.ts:28
 
 ## Methods
 
@@ -98,11 +96,11 @@ A promise that resolves to `true` if the connection is successful, and `false` o
 
 **`Throws`**
 
-InvalidURLError if the URL is invalid.
+[InvalidURLError](InvalidURLError.md) if the URL is invalid.
 
 **`Throws`**
 
-HeaderError if there is an issue with the headers, such as an invalid username or password.
+[HeaderError](HeaderError.md) if there is an issue with the headers, such as an invalid username or password.
 
 **`Throws`**
 
@@ -133,7 +131,7 @@ try {
 
 #### Defined in
 
-[index.ts:220](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L220)
+src/wpapihandler.ts:221
 
 ___
 
@@ -153,13 +151,13 @@ ___
 
 #### Defined in
 
-[index.ts:277](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L277)
+src/wpapihandler.ts:278
 
 ___
 
 ### get\_amount
 
-▸ **get_amount**(`amount`): `Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+▸ **get_amount**(`amount`): `Promise`\<`ServerData`\>
 
 #### Parameters
 
@@ -169,11 +167,11 @@ ___
 
 #### Returns
 
-`Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+`Promise`\<`ServerData`\>
 
 #### Defined in
 
-[index.ts:248](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L248)
+src/wpapihandler.ts:249
 
 ___
 
@@ -197,13 +195,13 @@ The method should not be used
 
 #### Defined in
 
-[index.ts:86](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L86)
+src/wpapihandler.ts:87
 
 ___
 
 ### get\_posts
 
-▸ **get_posts**(`id?`): `Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+▸ **get_posts**(`id?`): `Promise`\<`ServerData`\>
 
 Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
 
@@ -215,7 +213,7 @@ Asynchronously retrieves WordPress posts based on the provided ID or retrieves a
 
 #### Returns
 
-`Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+`Promise`\<`ServerData`\>
 
 A promise that resolves to an object containing the status and data/error of the request.
 
@@ -252,7 +250,7 @@ console.error(errorPost.status, specificPost.error);
 
 #### Defined in
 
-[index.ts:126](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L126)
+src/wpapihandler.ts:127
 
 ___
 
@@ -287,13 +285,13 @@ const totalPosts = await wpa.post_len();
 
 #### Defined in
 
-[index.ts:70](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L70)
+src/wpapihandler.ts:71
 
 ___
 
 ### post\_post
 
-▸ **post_post**(`new_post?`): `Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+▸ **post_post**(`new_post?`): `Promise`\<`ServerData`\>
 
 Asynchronously posts a new post to the WordPress site.
 
@@ -301,11 +299,11 @@ Asynchronously posts a new post to the WordPress site.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `new_post?` | [`Post`](../modules/index.md#post) | The post to be posted to the WordPress site. |
+| `new_post?` | `Post` | The post to be posted to the WordPress site. |
 
 #### Returns
 
-`Promise`\<[`ServerData`](../modules/index.md#serverdata)\>
+`Promise`\<`ServerData`\>
 
 A promise that resolves to an object containing the status and data/error of the request.
 
@@ -336,4 +334,4 @@ console.log(result.status, result.data);
 
 #### Defined in
 
-[index.ts:172](https://github.com/MichaelGloessl04/wpapihandler/blob/51f079e/index.ts#L172)
+src/wpapihandler.ts:173
