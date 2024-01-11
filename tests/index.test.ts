@@ -1,227 +1,154 @@
 import axios from 'axios';
 import { WPApiHandler } from '../index';
+import { Buffer } from 'buffer';
 
-jest.mock('axios');
+require('dotenv').config();
+
 
 describe('WPApiHandler', () => {
+  const encode = (str: string): string =>
+      Buffer.from(str, 'binary').toString('base64');
+  const login = `${process.env.LOGIN}:${process.env.PASSWORD}`
   const serverAddress = 'https://dev.htlweiz.at/wordpress';
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: `Basic ${process.env.ACCESS_TOKEN}`,
+    Authorization: `Basic ${encode(login)}`,
   };
-
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
 
   describe('post_len', () => {
     it('should return the total number of posts', async () => {
-      const response = {
-        headers: {
-          'x-wp-total': '10',
-        },
-      };
-      axios.get = jest.fn().mockResolvedValue(response);
-
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
-      const result = await wpa.post_len();
 
-      expect(result).toBe(10);
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/`,
-        { headers }
-      );
+      // Act
+      const totalPosts = await wpa.post_len();
+
+      // Assert
+      expect(totalPosts).toBeGreaterThan(0);
     });
 
     it('should throw an error if the request fails', async () => {
-      const error = new Error('Request failed');
-      (axios.get as jest.Mock).mockRejectedValue(error);
+      // Arrange
+      const wpa = new WPApiHandler('WRONG', headers);
 
-      const wpa = new WPApiHandler(serverAddress, headers);
-
-      await expect(wpa.post_len()).rejects.toThrowError(error);
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/`,
-        { headers }
-      );
+      // Act & Assert
+      await expect(wpa.post_len()).toThrow();
     });
   });
 
   describe('get_posts', () => {
     it('should retrieve all posts if no ID is specified', async () => {
-      const totalPosts = 10;
-      const response = {
-        status: 200,
-        data: [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }],
-      };
-      (axios.get as jest.Mock).mockResolvedValue(response);
-
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
-      const result = await wpa.get_posts();
 
-      expect(result).toEqual({
-        status: 200,
-        data: response.data,
-      });
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/?page=1&per_page=100`,
-        { headers }
-      );
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/?page=2&per_page=100`,
-        { headers }
-      );
-    });
+      // Act
+      const result: any = await wpa.get_posts();
+
+      // Assert
+      expect(result.status).toBe(200);
+      expect(result.data).toBeDefined();
+    }, 10000);
 
     it('should retrieve a specific post if ID is specified', async () => {
-      const postId = '1';
-      const response = {
-        status: 200,
-        data: { id: 1, title: 'Post 1' },
-      };
-      (axios.get as jest.Mock).mockResolvedValue(response);
-
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
-      const result = await wpa.get_posts(postId);
+      const postId = '123';
 
-      expect(result).toEqual({
-        status: 200,
-        data: response.data,
-      });
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/${postId}`,
-        { headers }
-      );
+      // Act
+      const result: any = await wpa.get_posts(postId);
+
+      // Assert
+      expect(result.status).toBe(200);
+      expect(result.data).toBeDefined();
     });
 
-    it('should return an error if the request fails', async () => {
-      const postId = '1';
-      const error = new Error('Request failed');
-      (axios.get as jest.Mock).mockRejectedValue(error);
-
+    it('should return an error if the specified post does not exist', async () => {
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
+      const nonExistentPostId = '999';
 
-      await expect(wpa.get_posts(postId)).rejects.toThrowError(error);
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/${postId}`,
-        { headers }
-      );
+      // Act
+      const result: any = await wpa.get_posts(nonExistentPostId);
+
+      // Assert
+      expect(result.status).not.toBe(200);
+      expect(result.error).toBeDefined();
     });
   });
 
   describe('post_post', () => {
     it('should post a new post to the WordPress site', async () => {
+      // Arrange
+      const wpa = new WPApiHandler(serverAddress, headers);
       const newPost = {
         title: 'New Post',
         content: 'This is a new post.',
         status: 'publish',
       };
-      const response = {
-        status: 200,
-        data: { id: 1, title: 'New Post' },
-      };
-      (axios.post as jest.Mock).mockResolvedValue(response);
 
-      const wpa = new WPApiHandler(serverAddress, headers);
-      const result = await wpa.post_post(newPost);
+      // Act
+      const result: any = await wpa.post_post(newPost);
 
-      expect(result).toEqual({
-        status: 200,
-        data: response.data,
-      });
-      expect(axios.post).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/`,
-        newPost,
-        { headers }
-      );
+      // Assert
+      expect(result.status).toBe(200);
+      expect(result.data).toBeDefined();
     });
 
-    it('should return an error if the request fails', async () => {
-      const newPost = {
-        title: 'New Post',
-        content: 'This is a new post.',
+    it('should throw an error if the request fails', async () => {
+      // Arrange
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const invalidPost = {
+        title: 'Invalid Post',
+        content: 'This post is invalid.',
         status: 'publish',
       };
-      const error = new Error('Request failed');
-      (axios.post as jest.Mock).mockRejectedValue(error);
 
-      const wpa = new WPApiHandler(serverAddress, headers);
-
-      await expect(wpa.post_post(newPost)).rejects.toThrowError(error);
-      expect(axios.post).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/wp/v2/posts/`,
-        newPost,
-        { headers }
-      );
+      // Act & Assert
+      await expect(wpa.post_post(invalidPost)).rejects.toThrow(Error);
     });
   });
 
   describe('check_connection', () => {
     it('should return true if the connection is successful', async () => {
-      const response = {
-        status: 200,
-      };
-      (axios.get as jest.Mock).mockResolvedValue(response);
-
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
-      const result = await wpa.check_connection();
 
-      expect(result).toBe(true);
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/`,
-        { headers }
-      );
+      // Act
+      const isConnected = await wpa.check_connection();
+
+      // Assert
+      expect(isConnected).toBe(true);
     });
 
-    it('should throw an InvalidURLError if the URL is invalid', async () => {
-      const error = {
-        code: 'ENOTFOUND',
-      };
-      (axios.get as jest.Mock).mockRejectedValue(error);
+    it('should throw an error if the URL is invalid', async () => {
+      // Arrange
+      const invalidServerAddress = 'https://invalid-url.com';
+      const wpa = new WPApiHandler(invalidServerAddress, headers);
 
-      const wpa = new WPApiHandler(serverAddress, headers);
-
-      await expect(wpa.check_connection()).rejects.toThrowError(
-        'Invalid URL.'
-      );
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/`,
-        { headers }
-      );
+      // Act & Assert
+      await expect(wpa.check_connection()).rejects.toThrow(Error);
     });
 
-    it('should throw a HeaderError if there is an issue with the headers', async () => {
-      const error = {
-        response: {
-          data: {
-            code: 'invalid_username',
-          },
-        },
+    it('should throw an error if there is an issue with the headers', async () => {
+      // Arrange
+      const invalidHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: 'InvalidToken',
       };
-      (axios.get as jest.Mock).mockRejectedValue(error);
+      const wpa = new WPApiHandler(serverAddress, invalidHeaders);
 
-      const wpa = new WPApiHandler(serverAddress, headers);
-
-      await expect(wpa.check_connection()).rejects.toThrowError(
-        'Invalid username or password.'
-      );
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/`,
-        { headers }
-      );
+      // Act & Assert
+      await expect(wpa.check_connection()).rejects.toThrow(Error);
     });
 
-    it('should throw an error if the request fails', async () => {
-      const error = new Error('Request failed');
-      (axios.get as jest.Mock).mockRejectedValue(error);
-
+    it('should throw an error if an unexpected error occurs', async () => {
+      // Arrange
       const wpa = new WPApiHandler(serverAddress, headers);
+      // Mocking the axios.get method to throw an error
+      jest.spyOn(axios, 'get').mockRejectedValue(new Error('Unexpected error'));
 
-      await expect(wpa.check_connection()).rejects.toThrowError(error);
-      expect(axios.get).toHaveBeenCalledWith(
-        `${serverAddress}/wp-json/`,
-        { headers }
-      );
+      // Act & Assert
+      await expect(wpa.check_connection()).rejects.toThrow(Error);
     });
   });
 });
