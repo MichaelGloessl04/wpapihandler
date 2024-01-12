@@ -1,5 +1,6 @@
 support
-tests
+__tests__
 examples
 .gitignore
 History.md
+docs
