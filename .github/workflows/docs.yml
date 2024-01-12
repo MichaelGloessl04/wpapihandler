@@ -1,4 +1,4 @@
-Aname: Generate Documentation
+name: Generate Documentation
 
 on:
     push:
