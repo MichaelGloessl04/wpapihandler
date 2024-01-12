@@ -1,0 +1,25 @@
+name: Generate Documentation
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Delete previous documentation
+              run: |
+                    rm -rf docs
+            - name: Generate typedoc documentation
+              run: |
+                    npm install
+                    npm run typedoc
+            - name: Add documentation to commit
+              run: |
+                    git add docs
+                    git commit -m "Update documentation"
