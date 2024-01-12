@@ -1,3 +1,4 @@
+import exp from 'constants';
 import { Post } from '../src/types/types';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -61,6 +62,47 @@ describe('WPApiHandler', () => {
         }
       } catch (error) {
         fail();
+      }
+    });
+  });
+
+  describe('get_tags', () => {
+    it('should return all tags', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag_ids: number[] = [49];
+
+      try {
+        const tags: Array<string> = await wpa.get_tags(tag_ids);
+
+        expect(tags.length).toBeGreaterThan(0);
+        expect(tags[0]).toEqual('test');
+      } catch (error) {
+        fail();
+      }
+    });
+
+    it('should return empty array if no tags are found', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag_ids: number[] = [0];
+
+      try {
+        const tags: Array<string> = await wpa.get_tags(tag_ids);
+
+        expect(tags.length).toEqual(0);
+      } catch (error) {
+        fail();
+      }
+    });
+
+    it('should throw a TypeError if tag_ids is not an array of numbers', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag_ids: any = 'test';
+
+      try {
+        await wpa.get_tags(tag_ids);
+        fail();
+      } catch (error) {
+        expect(error).toBeInstanceOf(TypeError);
       }
     });
   });

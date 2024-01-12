@@ -193,7 +193,7 @@ export class WPApiHandler {
         }
     }
 
-    private async get_tags(tag_ids: number[]): Promise<Array<string>> {
+    public async get_tags(tag_ids: number[]): Promise<Array<string>> {
         let tags: Array<string> = [];
 
         let promises = tag_ids.map(async (tag_id: number) => {
