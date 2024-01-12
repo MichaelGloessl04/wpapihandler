@@ -106,6 +106,32 @@ describe('(1) WPApiHandler', () => {
       }
     });
   });
+
+  describe('(4) check_connection', () => {
+    it('(1) should return true if connection is established', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      try {
+        const result: boolean = await wpa.check_connection();
+
+        expect(result).toBe(true);
+      } catch (error) {
+        fail();
+      }
+    });
+
+    it('(2) should return false if connection is not established', async () => {
+      const wpa = new WPApiHandler('https://example.com', headers);
+
+      try {
+        const result: boolean = await wpa.check_connection();
+
+        expect(result).toBe(false);
+      } catch (error) {
+        fail();
+      }
+    });
+  });
 });
 
 function isPost(post: any): boolean {

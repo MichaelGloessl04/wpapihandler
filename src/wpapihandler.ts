@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { InvalidURLError, HeaderError } from './errors/errors';
 import { Headers, Post } from './types/types';
+import { log } from 'console';
 
 
 export class WPApiHandler {
@@ -29,7 +30,6 @@ export class WPApiHandler {
         const axiosHeaders: AxiosRequestConfig['headers'] = headers;
         this.server_address = server_address;
         this.headers = { headers: axiosHeaders };
-        this.check_connection();
     }
 
     /**
@@ -178,14 +178,19 @@ export class WPApiHandler {
      * console.log(result.status, result.data);
      */
     async check_connection(): Promise<boolean> {
-        const response = await axios.get(
-            `${this.server_address}/wp-json/`,
-            this.headers,
-        );
-
-        if (response.status === 200) {
-            return true;
-        } else {
+        try {
+            const response = await axios.get(
+                `${this.server_address}/wp-json/`,
+                this.headers,
+            );
+            if (response.status === 200) {
+                return true;
+            } else {
+                console.error('Error fetching data:', response.status);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
             return false;
         }
     }
