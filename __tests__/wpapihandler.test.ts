@@ -46,13 +46,18 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const posts: Array<Post> = await wpa.get_posts('291');
+        const posts: Array<Post> = await wpa.get_posts('1910');
         if (posts.length > 0) {
-            const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
-            expect(isPost(post)).toBe(true);
-            expect(post.id).toEqual(291);
+          const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
+          expect(isPost(post)).toBe(true);
+
+          expect(post.id).toEqual(1910);
+          expect(post.title).toEqual('Test');
+          expect(post.content).toEqual('Test Content');
+          expect(post.status).toEqual('draft');
+          expect(post.tags).toEqual(['test']);
         } else {
-            fail('No posts returned');
+          fail('No posts returned');
         }
       } catch (error) {
         fail();
@@ -66,6 +71,7 @@ function isPost(post: any): boolean {
     post.hasOwnProperty('id') &&
     post.hasOwnProperty('title') &&
     post.hasOwnProperty('content') &&
-    post.hasOwnProperty('status')
+    post.hasOwnProperty('status') &&
+    post.hasOwnProperty('tags')
   );
 }
