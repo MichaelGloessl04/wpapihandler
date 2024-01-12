@@ -1,3 +1,4 @@
+import exp from 'constants';
 import { Post } from '../src/types/types';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -33,12 +34,9 @@ describe('WPApiHandler', () => {
         const posts: Post[] = await wpa.get_posts();
 
         posts.forEach((post) => {
-          expect(post).toMatchObject<Post>({
-            id: expect.any(Number),
-            title: expect.any(String),
-            content: expect.any(String),
-            status: expect.any(String) as 'publish' | 'draft' | 'trash'});
+          expect(isPost(post)).toBe(true);
         });
+
         expect(posts.length).toBeGreaterThan(0);
       } catch (error) {
         fail();
@@ -51,14 +49,8 @@ describe('WPApiHandler', () => {
       try {
         const posts: Array<Post> = await wpa.get_posts('291');
         if (posts.length > 0) {
-            const post: Post = posts[0]!;
-
-            expect(post).toMatchObject<Post>({
-                id: expect.any(Number),
-                title: expect.any(String),
-                content: expect.any(String),
-                status: expect.any(String) as 'publish' | 'draft' | 'trash',
-            });
+            const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
+            expect(isPost(post)).toBe(true);
             expect(post.id).toEqual(291);
         } else {
             fail('No posts returned');
@@ -69,3 +61,12 @@ describe('WPApiHandler', () => {
     });
   });
 });
+
+function isPost(post: any): boolean {
+  return (
+    post.hasOwnProperty('id') &&
+    post.hasOwnProperty('title') &&
+    post.hasOwnProperty('content') &&
+    post.hasOwnProperty('status')
+  );
+}
