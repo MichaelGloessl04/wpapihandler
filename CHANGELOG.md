@@ -1,5 +1,19 @@
 # wpapihandler
 
+## 1.1.0
+
+### Minor Changes
+
+- 9764fe8: Changed return type of most methods to the new Post type.
+- 3d07d6b: added method get_tags
+
+### Patch Changes
+
+- 46711dc: removed unnecessary methods
+- 2b2d6f5: fixed security flaws related to access tokens for testing.
+- 2b2d6f5: moved from custom testing environment to ts-jest.
+- b443bd0: change: check_connection no longer gets executed in the constructor
+
 ## 1.0.6
 
 ### Patch Changes
