@@ -16,9 +16,7 @@
 ### Methods
 
 - [check\_connection](WPApiHandler.md#check_connection)
-- [execute\_get](WPApiHandler.md#execute_get)
 - [get\_amount](WPApiHandler.md#get_amount)
-- [get\_events](WPApiHandler.md#get_events)
 - [get\_posts](WPApiHandler.md#get_posts)
 - [post\_len](WPApiHandler.md#post_len)
 - [post\_post](WPApiHandler.md#post_post)
@@ -36,7 +34,7 @@ Creates a new instance of the WPApiHandler class.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `server_address` | `string` | The base server address for the WordPress site. |
-| `headers` | `Headers` | The headers to be included in the HTTP requests. |
+| `headers` | [`Headers`](../interfaces/Headers.md) | The headers to be included in the HTTP requests. |
 
 #### Returns
 
@@ -56,7 +54,7 @@ const wpa = new WPApiHandler(
 
 #### Defined in
 
-src/wpapihandler.ts:47
+[src/wpapihandler.ts:26](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L26)
 
 ## Properties
 
@@ -66,7 +64,7 @@ src/wpapihandler.ts:47
 
 #### Defined in
 
-src/wpapihandler.ts:29
+[src/wpapihandler.ts:8](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L8)
 
 ___
 
@@ -76,7 +74,7 @@ ___
 
 #### Defined in
 
-src/wpapihandler.ts:28
+[src/wpapihandler.ts:7](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L7)
 
 ## Methods
 
@@ -131,33 +129,13 @@ try {
 
 #### Defined in
 
-src/wpapihandler.ts:221
-
-___
-
-### execute\_get
-
-▸ **execute_get**(`endpoint`): `Promise`\<`Object`[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `endpoint` | `string` |
-
-#### Returns
-
-`Promise`\<`Object`[]\>
-
-#### Defined in
-
-src/wpapihandler.ts:278
+[src/wpapihandler.ts:189](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L189)
 
 ___
 
 ### get\_amount
 
-▸ **get_amount**(`amount`): `Promise`\<`ServerData`\>
+▸ **get_amount**(`amount`): `Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 #### Parameters
 
@@ -167,41 +145,17 @@ ___
 
 #### Returns
 
-`Promise`\<`ServerData`\>
+`Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 #### Defined in
 
-src/wpapihandler.ts:249
-
-___
-
-### get\_events
-
-▸ **get_events**(`id?`): `Promise`\<`Object`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id?` | `string` |
-
-#### Returns
-
-`Promise`\<`Object`\>
-
-**`Deprecated`**
-
-The method should not be used
-
-#### Defined in
-
-src/wpapihandler.ts:87
+[src/wpapihandler.ts:217](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L217)
 
 ___
 
 ### get\_posts
 
-▸ **get_posts**(`id?`): `Promise`\<`ServerData`\>
+▸ **get_posts**(`id?`): `Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
 
@@ -213,7 +167,7 @@ Asynchronously retrieves WordPress posts based on the provided ID or retrieves a
 
 #### Returns
 
-`Promise`\<`ServerData`\>
+`Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 A promise that resolves to an object containing the status and data/error of the request.
 
@@ -250,7 +204,7 @@ console.error(errorPost.status, specificPost.error);
 
 #### Defined in
 
-src/wpapihandler.ts:127
+[src/wpapihandler.ts:94](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L94)
 
 ___
 
@@ -285,13 +239,13 @@ const totalPosts = await wpa.post_len();
 
 #### Defined in
 
-src/wpapihandler.ts:71
+[src/wpapihandler.ts:50](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L50)
 
 ___
 
 ### post\_post
 
-▸ **post_post**(`new_post?`): `Promise`\<`ServerData`\>
+▸ **post_post**(`new_post?`): `Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 Asynchronously posts a new post to the WordPress site.
 
@@ -299,11 +253,11 @@ Asynchronously posts a new post to the WordPress site.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `new_post?` | `Post` | The post to be posted to the WordPress site. |
+| `new_post?` | [`Post`](../interfaces/Post.md) | The post to be posted to the WordPress site. |
 
 #### Returns
 
-`Promise`\<`ServerData`\>
+`Promise`\<[`ServerData`](../interfaces/ServerData.md)\>
 
 A promise that resolves to an object containing the status and data/error of the request.
 
@@ -334,4 +288,4 @@ console.log(result.status, result.data);
 
 #### Defined in
 
-src/wpapihandler.ts:173
+[src/wpapihandler.ts:141](https://github.com/MichaelGloessl04/WP_API_Extractor/blob/c19add0/src/wpapihandler.ts#L141)

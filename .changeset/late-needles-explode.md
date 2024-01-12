@@ -2,4 +2,4 @@
 "wpapihandler": patch
 ---
 
-moved from custom testing environment to ts-jest
+moved from custom testing environment to ts-jest.

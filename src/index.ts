@@ -1,8 +1,12 @@
-import { WPApiHandler, ServerData } from "./wpapihandler";
+import { WPApiHandler } from "./wpapihandler";
 import { InvalidURLError, HeaderError } from "./errors/errors";
+import { Headers, Post, WPResponse } from "./types/types";
 
 export {
     WPApiHandler,
-    ServerData,
+    WPResponse as ServerData,
+    Post,
+    Headers,
     InvalidURLError,
-    HeaderError };
+    HeaderError,
+}
