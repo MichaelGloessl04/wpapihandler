@@ -139,11 +139,10 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously updates a post on the WordPress site.
+     * Checks if the connection to the WordPress site is working.
      *
      * @async
-     * @param {Post} [updated_post]: The post to be updated on the WordPress site.
-     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
+     * @returns {Promise<boolean>} A promise that resolves to true if the connection is working, false otherwise.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -154,15 +153,13 @@ export class WPApiHandler {
      *      }
      * );
      *
-     * const updated_post = {
-     *      id: 1,
-     *      title: 'Updated Post',
-     *      content: 'This is an updated post.',
-     *      status: 'publish',
-     * };
-     *
-     * const result = await wpa.update_post(updated_post);
-     * console.log(result.status, result.data);
+     * const result = await wpa.check_connection();
+     * 
+     * if (result) {
+     *     console.log('Connection is working.');
+     * } else {
+     *    console.log('Connection is not working.');
+     * }
      */
     async check_connection(): Promise<boolean> {
         try {
@@ -183,7 +180,7 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously retrieves the tags associated with a post.
+     * Asynchronously retrieves the tags by their IDs.
      *
      * @async
      * @param {number[]} tag_ids - The IDs of the tags to be retrieved.
