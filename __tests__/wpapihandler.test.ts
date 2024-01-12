@@ -1,4 +1,4 @@
-import { Post, WPResponse } from '../src/types/types';
+import { Post } from '../src/types/types';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
 
@@ -30,18 +30,18 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const posts: WPResponse = await wpa.get_posts();
+        const posts: Post[] = await wpa.get_posts();
 
-        expect(posts.status).toEqual(200);
-
-        expect(posts).toHaveProperty('data');
-        expect(posts.data).toMatchObject<Post>({
-          title: expect.any(String),
-          content: expect.any(String),
-          status: expect.any(String) });
-        expect(posts.data.length).toBeGreaterThan(0);
+        posts.forEach((post) => {
+          expect(post).toMatchObject<Post>({
+            id: expect.any(Number),
+            title: expect.any(String),
+            content: expect.any(String),
+            status: expect.any(String) as 'publish' | 'draft' | 'trash'});
+        });
+        expect(posts.length).toBeGreaterThan(0);
       } catch (error) {
-        fail(error);
+        fail();
       }
     }, 10000);
 
@@ -49,16 +49,22 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const post: WPResponse = await wpa.get_posts('291');
+        const posts: Array<Post> = await wpa.get_posts('291');
+        if (posts.length > 0) {
+            const post: Post = posts[0]!;
 
-        expect(post.status).toEqual(200);
-
-        expect(post).toHaveProperty('posts');
-        expect(post.data).toBeInstanceOf(Object);
-        expect(post.data).toHaveProperty('id');
-        expect(post.data.id).toEqual(291);
+            expect(post).toMatchObject<Post>({
+                id: expect.any(Number),
+                title: expect.any(String),
+                content: expect.any(String),
+                status: expect.any(String) as 'publish' | 'draft' | 'trash',
+            });
+            expect(post.id).toEqual(291);
+        } else {
+            fail('No posts returned');
+        }
       } catch (error) {
-        fail(error);
+        fail();
       }
     });
   });

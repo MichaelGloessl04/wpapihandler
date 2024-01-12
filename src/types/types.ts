@@ -1,17 +1,12 @@
-export interface WPResponse {
-    status: number;
-    data?: Array<Post> | Post | any;
-    error?: Error;
-};
-
-export interface Post {
+export type Post = {
+    id: number;
     title: string;
     content: string;
     status: string;
     [key: string]: any;
 };
 
-export interface Headers {
+export type Headers = {
     'Content-Type': string;
     Authorization: string;
     [key: string]: string;

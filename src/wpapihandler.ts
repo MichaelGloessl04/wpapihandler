@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { InvalidURLError, HeaderError } from './errors/errors';
-import { Headers, Post, WPResponse } from './types/types';
+import { Headers, Post } from './types/types';
 
 
 export class WPApiHandler {
@@ -91,29 +91,20 @@ export class WPApiHandler {
      * console.error(errorPost.status, specificPost.error);
      *
      */
-    async get_posts(id?: string): Promise<WPResponse> {
+    async get_posts(id?: string): Promise<Array<Post>> {
         let total: number = await this.post_len();
         if (id !== undefined) {
             let response: AxiosResponse = await axios.get(
                 `${this.server_address}/wp-json/wp/v2/posts/${id}`,
                 this.headers
             );
-            if (response.status == 200) {
-                let post: Post = {
-                    title: response.data.title.rendered,
-                    content: response.data.content.rendered,
-                    status: response.data.status,
-                };
-                return {
-                    status: 200,
-                    posts: post,
-                };
-            } else {
-                return {
-                    status: response.status,
-                    error: Error(response.statusText),
-                };
-            }
+            let post: Post = {
+                id: response.data.id,
+                title: response.data.title.rendered,
+                content: response.data.content.rendered,
+                status: response.data.status,
+            };
+            return [post];
         } else {
             return await this.get_amount(total);
         }
@@ -143,23 +134,19 @@ export class WPApiHandler {
      * const result = await wpa.post_post(new_post);
      * console.log(result.status, result.data);
      */
-    async post_post(new_post: Post): Promise<WPResponse> {
-        try {
-            const response = await axios.post(
-                `${this.server_address}/wp-json/wp/v2/posts/`,
-                new_post,
-                this.headers,
-            );
-            return {
-                status: 200,
-                response: response.data,
-            };
-        } catch (error: any) {
-            return {
-                status: error.response.status,
-                error: Error(error.response.statusText),
-            };
-        }
+    async post_post(new_post: Post): Promise<Post> {
+        const response: AxiosResponse = await axios.post(
+            `${this.server_address}/wp-json/wp/v2/posts/`,
+            new_post,
+            this.headers,
+        );
+        let post: Post = {
+            id: response.data.id,
+            title: response.data.title.rendered,
+            content: response.data.content.rendered,
+            status: response.data.status,
+        };
+        return post;
     }
 
     /**
@@ -192,34 +179,19 @@ export class WPApiHandler {
      * }
      */
     async check_connection(): Promise<boolean> {
-        try {
-            const response = await axios.get(
-                `${this.server_address}/wp-json/`,
-                this.headers,
-            );
+        const response = await axios.get(
+            `${this.server_address}/wp-json/`,
+            this.headers,
+        );
 
-            if (response.status === 200) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ENOTFOUND') {
-                    throw new InvalidURLError('Invalid URL.');
-                } else if (error.response?.data.code === 'invalid_username') {
-                    throw new HeaderError('Invalid username or password.');
-                } else {
-                    throw error;
-                }
-            } else {
-                console.error('An unexpected error occurred:', error);
-                return false;
-            }
+        if (response.status === 200) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    private async get_amount(amount: number): Promise<WPResponse> {
+    private async get_amount(amount: number): Promise<Array<Post>> {
         let posts: Array<Post> = [];
         let i: number = 1;
 
@@ -230,27 +202,20 @@ export class WPApiHandler {
                 `${this.server_address}/wp-json/wp/v2/posts/?page=${i++}&per_page=100`,
                 this.headers,
             );
-            if (response.status == 200) {
-                response.data.forEach((post: any) => {
-                    let current_post: Post = {
-                        title: post.title.rendered,
-                        content: post.content.rendered,
-                        status: post.status,
-                        };
-                    posts.push(current_post);
-                });
-            } else {
-                return {
-                    status: response.status,
-                    error: Error(response.statusText),
-                };
-            }
+
+            response.data.forEach((post: any) => {
+                let current_post: Post = {
+                    id: post.id,
+                    title: post.title.rendered,
+                    content: post.content.rendered,
+                    status: post.status,
+                    };
+                posts.push(current_post);
+            });
+
             amount -= perPage;
         }
 
-        return {
-            status: 200,
-            posts: posts,
-        };
+        return posts;
     }
 }
