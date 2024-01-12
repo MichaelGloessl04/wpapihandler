@@ -1,5 +1,11 @@
 # wpapihandler
 
+## 1.2.1
+
+### Patch Changes
+
+- 0301615: hotfix: fixed documentation
+
 ## 1.1.0
 
 ### Minor Changes
