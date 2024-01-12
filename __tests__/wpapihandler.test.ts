@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { Post } from '../src/types/types';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
