@@ -11,8 +11,10 @@ export class WPApiHandler {
      * Creates a new instance of the WPApiHandler class.
      *
      * @constructor
-     * @param {string} server_address - The base server address for the WordPress site.
-     * @param {Headers} headers - The headers to be included in the HTTP requests.
+     * @param {string} server_address: The address of the WordPress site.
+     * @param {Headers} headers: The headers to be used for the requests.
+     * @throws {@link InvalidURLError} if the server address is invalid.
+     * @throws {@link HeaderError} if the headers are invalid.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -31,21 +33,23 @@ export class WPApiHandler {
     }
 
     /**
-     * Fetches the total number of posts from the WordPress site.
+     * Asynchronously retrieves the total number of posts on the WordPress site.
      *
+     * @async
      * @returns {Promise<number>} A promise that resolves to the total number of posts.
-     *
-     * @throws {@link Error} if the request fails.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
-     *     'https://example.com',
-     *     {
-     *         "Content-Type": "application/json",
-     *         "Authorization": "Basic YOURACCESSTOKEN"
-     *     }
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
      * );
-     * const totalPosts = await wpa.post_len();
+     *
+     * const total_posts = await wpa.post_len();
+     * console.log(total_posts);
      */
     async post_len(): Promise<number> {
         try {
@@ -61,35 +65,27 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously retrieves WordPress posts based on the provided ID or retrieves all posts if no ID is specified.
+     * Asynchronously retrieves posts from the WordPress site.
      *
      * @async
-     * @param {string} [id] - The ID of a specific post to retrieve. If not provided, retrieves all posts.
-     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
+     * @param {string} [id]: The ID of the post to be retrieved.
+     * @returns {Promise<Post[]>} A promise that resolves to an array of posts.
      * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
-     *     'https://example.com',
-     *     {
+     *      'https://example.com',
+     *      {
      *          "Content-Type": "application/json",
      *          "Authorization": "Basic YOURACCESSTOKEN"
      *      }
      * );
      *
-     * // Retrieves all posts
-     * const result = await wpa.get_posts();
-     * console.log(result.status, result.data);
+     * const posts = await wpa.get_posts();
+     * console.log(posts);
      *
-     * // Alternatively, to retrieve a specific post
-     * const specificPost = await wpa.get_posts('postId');
-     * console.log(specificPost.status, specificPost.data);
-     *
-     * // If an an error occurs during the GET Request
-     * non_existent_post_id = 0;
-     * const errorPost = await wpa.get_posts(non_existent_post_id);
-     * console.error(errorPost.status, specificPost.error);
-     *
+     * const post = await wpa.get_posts('1910');
+     * console.log(post);
      */
     async get_posts(id?: string): Promise<Array<Post>> {
         let total: number = await this.post_len();
@@ -112,11 +108,13 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously posts a new post to the WordPress site.
+     * Asynchronously creates a new post on the WordPress site.
      *
-     * @param {Post} [new_post]: The post to be posted to the WordPress site.
-     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
+     * @async
+     * @param {Post} [new_post]: The post to be created on the WordPress site.
+     * @returns {Promise<Post>} A promise that resolves to the post that was created.
      * @throws {@link Error} if an unexpected error occurs during the execution of the method.
+     *
      * @example
      * const wpa = new WPApiHandler(
      *      'https://example.com',
@@ -130,10 +128,11 @@ export class WPApiHandler {
      *      title: 'New Post',
      *      content: 'This is a new post.',
      *      status: 'publish',
+     *      tags: [1, 2, 3],
      * };
      *
      * const result = await wpa.post_post(new_post);
-     * console.log(result.status, result.data);
+     * console.log(result);
      */
     async post_post(new_post: Post): Promise<Post> {
         const response: AxiosResponse = await axios.post(
@@ -152,12 +151,11 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously checks the connection to the WordPress site by making a request to the wp-json endpoint.
+     * Asynchronously updates a post on the WordPress site.
      *
      * @async
-     * @returns {Promise<boolean>} A promise that resolves to `true` if the connection is successful, and `false` otherwise.
-     * @throws {@link InvalidURLError} if the URL is invalid.
-     * @throws {@link HeaderError} if there is an issue with the headers, such as an invalid username or password.
+     * @param {Post} [updated_post]: The post to be updated on the WordPress site.
+     * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
      * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
@@ -169,16 +167,15 @@ export class WPApiHandler {
      *      }
      * );
      *
-     * try {
-     *      const isConnected = await wpa.check_connection();
-     *      if (isConnected) {
-     *          console.log('Connected to the WordPress site.');
-     *      } else {
-     *          console.log('Connection failed.');
-     *      }
-     * } catch (error) {
-     *      console.error(error.message);
-     * }
+     * const updated_post = {
+     *      id: 1,
+     *      title: 'Updated Post',
+     *      content: 'This is an updated post.',
+     *      status: 'publish',
+     * };
+     *
+     * const result = await wpa.update_post(updated_post);
+     * console.log(result.status, result.data);
      */
     async check_connection(): Promise<boolean> {
         const response = await axios.get(
@@ -193,6 +190,27 @@ export class WPApiHandler {
         }
     }
 
+    /**
+     * Asynchronously retrieves the tags associated with a post.
+     *
+     * @async
+     * @param {number[]} tag_ids - The IDs of the tags to be retrieved.
+     * @returns {Promise<string[]>} A promise that resolves to an array of tags.
+     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * const tag_ids = [1, 2, 3];
+     * const tags = await wpa.get_tags(tag_ids);
+     * console.log(tags);
+     */
     public async get_tags(tag_ids: number[]): Promise<Array<string>> {
         let tags: Array<string> = [];
 
