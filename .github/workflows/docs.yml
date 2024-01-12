@@ -28,9 +28,12 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Delete previous documentation
-      run: |
-            rm -rf docs
+      run: rm -rf docs
 
     - name: JSDoc Action
       uses: andstor/jsdoc-action@v1.2.1
+      with:
+        source_dir: ./src
+        recurse: true
+        output_dir: ./docs
             
