@@ -3,6 +3,7 @@ export type Post = {
     title: string;
     content: string;
     status: string;
+    tags: Array<string>;
     [key: string]: any;
 };
 

@@ -103,6 +103,7 @@ export class WPApiHandler {
                 title: response.data.title.rendered,
                 content: response.data.content.rendered,
                 status: response.data.status,
+                tags: await this.get_tags(response.data.tags),
             };
             return [post];
         } else {
@@ -145,6 +146,7 @@ export class WPApiHandler {
             title: response.data.title.rendered,
             content: response.data.content.rendered,
             status: response.data.status,
+            tags: response.data.tags,
         };
         return post;
     }
@@ -191,6 +193,22 @@ export class WPApiHandler {
         }
     }
 
+    private async get_tags(tag_ids: number[]): Promise<Array<string>> {
+        let tags: Array<string> = [];
+
+        let promises = tag_ids.map(async (tag_id: number) => {
+            let response: AxiosResponse = await axios.get(
+                `${this.server_address}/wp-json/wp/v2/tags/${tag_id}`,
+                this.headers,
+            );
+            return response.data.name;
+        });
+
+        tags = await Promise.all(promises);
+
+        return tags;
+    }
+
     private async get_amount(amount: number): Promise<Array<Post>> {
         let posts: Array<Post> = [];
         let i: number = 1;
@@ -209,6 +227,7 @@ export class WPApiHandler {
                     title: post.title.rendered,
                     content: post.content.rendered,
                     status: post.status,
+                    tags: post.tags,
                     };
                 posts.push(current_post);
             });
