@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { InvalidURLError, HeaderError } from './errors/errors';
 import { Headers, Post } from './types/types';
+import { log } from 'console';
 
 
 export class WPApiHandler {
@@ -11,10 +12,8 @@ export class WPApiHandler {
      * Creates a new instance of the WPApiHandler class.
      *
      * @constructor
-     * @param {string} server_address: The address of the WordPress site.
-     * @param {Headers} headers: The headers to be used for the requests.
-     * @throws {@link InvalidURLError} if the server address is invalid.
-     * @throws {@link HeaderError} if the headers are invalid.
+     * @param {string} server_address - The address of the WordPress site.
+     * @param {Headers} headers - The headers to be used for the requests.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -29,7 +28,6 @@ export class WPApiHandler {
         const axiosHeaders: AxiosRequestConfig['headers'] = headers;
         this.server_address = server_address;
         this.headers = { headers: axiosHeaders };
-        this.check_connection();
     }
 
     /**
@@ -37,7 +35,6 @@ export class WPApiHandler {
      *
      * @async
      * @returns {Promise<number>} A promise that resolves to the total number of posts.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -52,16 +49,11 @@ export class WPApiHandler {
      * console.log(total_posts);
      */
     async post_len(): Promise<number> {
-        try {
-            const response = await axios.get(
-                `${this.server_address}/wp-json/wp/v2/posts/`,
-                this.headers,
-            );
-            return parseInt(response.headers['x-wp-total']);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            throw error;
-        }
+        const response = await axios.get(
+            `${this.server_address}/wp-json/wp/v2/posts/`,
+            this.headers,
+        );
+        return parseInt(response.headers['x-wp-total']);
     }
 
     /**
@@ -178,14 +170,19 @@ export class WPApiHandler {
      * console.log(result.status, result.data);
      */
     async check_connection(): Promise<boolean> {
-        const response = await axios.get(
-            `${this.server_address}/wp-json/`,
-            this.headers,
-        );
-
-        if (response.status === 200) {
-            return true;
-        } else {
+        try {
+            const response = await axios.get(
+                `${this.server_address}/wp-json/`,
+                this.headers,
+            );
+            if (response.status === 200) {
+                return true;
+            } else {
+                console.error('Error fetching data:', response.status);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
             return false;
         }
     }
