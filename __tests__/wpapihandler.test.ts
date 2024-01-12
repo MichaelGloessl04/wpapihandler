@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 require('dotenv').config();
 
 
-describe('WPApiHandler', () => {
+describe('(1) WPApiHandler', () => {
   const encode = (str: string): string =>
       Buffer.from(str, 'binary').toString('base64');
   const login = `${process.env.LOGIN}:${process.env.PASSWORD}`
@@ -16,8 +16,8 @@ describe('WPApiHandler', () => {
     Authorization: `Basic ${encode(login)}`,
   };
 
-  describe('post_len', () => {
-    it('should return the total number of posts', async () => {
+  describe('(1) post_len', () => {
+    it('(1) should return the total number of posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       const totalPosts = await wpa.post_len();
@@ -26,8 +26,8 @@ describe('WPApiHandler', () => {
     });
   });
 
-  describe('get_posts', () => {
-    it('should return all posts', async () => {
+  describe('(2) get_posts', () => {
+    it('(1) should return all posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -43,7 +43,7 @@ describe('WPApiHandler', () => {
       }
     }, 10000);
 
-    it('should return post with specified id', async () => {
+    it('(2) should return post with specified id', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -66,8 +66,8 @@ describe('WPApiHandler', () => {
     });
   });
 
-  describe('get_tags', () => {
-    it('should return all tags', async () => {
+  describe('(3) get_tags', () => {
+    it('(1) should return all tags', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: number[] = [49];
 
@@ -81,9 +81,9 @@ describe('WPApiHandler', () => {
       }
     });
 
-    it('should return empty array if no tags are found', async () => {
+    it('(2) should return empty array if no tags are found', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
-      const tag_ids: number[] = [0];
+      const tag_ids: number[] = [];
 
       try {
         const tags: Array<string> = await wpa.get_tags(tag_ids);
@@ -94,7 +94,7 @@ describe('WPApiHandler', () => {
       }
     });
 
-    it('should throw a TypeError if tag_ids is not an array of numbers', async () => {
+    it('(3) should throw a TypeError if tag_ids is not an array of numbers', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: any = 'test';
 
