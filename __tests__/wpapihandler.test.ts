@@ -16,7 +16,15 @@ describe('(1) WPApiHandler', () => {
     Authorization: `Basic ${encode(login)}`,
   };
 
-  describe('(1) post_len', () => {
+  describe('(1) constructor', () => {
+    it('(1) should create a new instance of WPApiHandler', () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      expect(wpa).toBeInstanceOf(WPApiHandler);
+    });
+  });
+
+  describe('(2) post_len', () => {
     it('(1) should return the total number of posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
@@ -26,7 +34,7 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(2) get_posts', () => {
+  describe('(3) get_posts', () => {
     it('(1) should return all posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
@@ -66,7 +74,7 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(3) get_tags', () => {
+  describe('(4) get_tags', () => {
     it('(1) should return all tags', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: number[] = [49];
@@ -107,7 +115,7 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(4) check_connection', () => {
+  describe('(5) check_connection', () => {
     it('(1) should return true if connection is established', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 

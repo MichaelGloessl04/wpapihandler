@@ -11,7 +11,7 @@ npm install wpapihandler
 ```
 
 # Documentation
-For more detailed documentation, please refer to [the official documentation](./docs/modules.md).
+For more detailed documentation, please refer to [the official documentation](docs).
 
 # Changelog
 See the [CHANGELOG.md](./CHANGELOG.md) for current version changes.

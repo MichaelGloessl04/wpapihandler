@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { InvalidURLError, HeaderError } from './errors/errors';
 import { Headers, Post } from './types/types';
-import { log } from 'console';
 
 
 export class WPApiHandler {
@@ -62,7 +60,6 @@ export class WPApiHandler {
      * @async
      * @param {string} [id]: The ID of the post to be retrieved.
      * @returns {Promise<Post[]>} A promise that resolves to an array of posts.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -105,7 +102,6 @@ export class WPApiHandler {
      * @async
      * @param {Post} [new_post]: The post to be created on the WordPress site.
      * @returns {Promise<Post>} A promise that resolves to the post that was created.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -148,7 +144,6 @@ export class WPApiHandler {
      * @async
      * @param {Post} [updated_post]: The post to be updated on the WordPress site.
      * @returns {Promise<WPResponse>} A promise that resolves to an object containing the status and data/error of the request.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -193,7 +188,6 @@ export class WPApiHandler {
      * @async
      * @param {number[]} tag_ids - The IDs of the tags to be retrieved.
      * @returns {Promise<string[]>} A promise that resolves to an array of tags.
-     * @throws {@link Error} if an unexpected error occurs during the execution of the method.
      *
      * @example
      * const wpa = new WPApiHandler(

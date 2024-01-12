@@ -23,7 +23,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
-    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs src",
+    "docs": "typedoc --out docs src",
     "test": "jest",
     "prettier-format": "prettier --config .prettierrc index.ts --write"
   },
