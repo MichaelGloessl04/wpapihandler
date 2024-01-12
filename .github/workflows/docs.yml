@@ -36,5 +36,7 @@ jobs:
 
     - name: Add documentation to commit
       run: |
-            git add docs
-            git commit -m "Update documentation"
+        git config --global user.email "gloess190117@sr.htlweiz.at"
+        git config --global user.name "MichaelGloessl04"
+        git add docs
+        git commit -m "Update documentation"
