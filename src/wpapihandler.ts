@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Headers, Post } from './types/types';
+import { AuthenticationError } from './errors/error';
 
 
 export class WPApiHandler {
@@ -47,11 +48,16 @@ export class WPApiHandler {
      * console.log(total_posts);
      */
     async post_len(): Promise<number> {
-        const response = await axios.get(
-            `${this.server_address}/wp-json/wp/v2/posts/`,
-            this.headers,
-        );
-        return parseInt(response.headers['x-wp-total']);
+        try {
+            const response = await axios.get(
+                `${this.server_address}/wp-json/wp/v2/posts/`,
+                this.headers,
+            );
+            return parseInt(response.headers['x-wp-total']);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return 0;
+        }
     }
 
     /**
@@ -139,10 +145,12 @@ export class WPApiHandler {
     }
 
     /**
-     * Checks if the connection to the WordPress site is working.
+     * Asynchronously updates a post on the WordPress site.
      *
      * @async
-     * @returns {Promise<boolean>} A promise that resolves to true if the connection is working, false otherwise.
+     * @param {Post} [updated_post]: The post to be updated on the WordPress site.
+     * @throws {@link AuthenticationError} If the authentication failed.
+     * @returns {Promise<Post>} A promise that resolves to the post that was updated.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -153,13 +161,16 @@ export class WPApiHandler {
      *      }
      * );
      *
-     * const result = await wpa.check_connection();
-     * 
-     * if (result) {
-     *     console.log('Connection is working.');
-     * } else {
-     *    console.log('Connection is not working.');
-     * }
+     * const updated_post = {
+     *      id: 1910,
+     *      title: 'Updated Post',
+     *      content: 'This is an updated post.',
+     *      status: 'publish',
+     *      tags: [1, 2, 3],
+     * };
+     *
+     * const result = await wpa.update_post(updated_post);
+     * console.log(result);
      */
     async check_connection(): Promise<boolean> {
         try {
@@ -173,9 +184,14 @@ export class WPApiHandler {
                 console.error('Error fetching data:', response.status);
                 return false;
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            return false;
+        } catch (error: any) {
+            if (error.response.data.code === 'incorrect_password' ||
+                error.response.data.code === 'invalid_username') {
+                throw new AuthenticationError(`Authentication failed because of: ${error.response.data.code}`);
+            } else {
+                console.error('Error fetching data:', error.response.data.code);
+                return false;
+            }
         }
     }
 
