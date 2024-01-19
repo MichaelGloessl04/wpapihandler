@@ -1,5 +1,5 @@
-import exp from 'constants';
 import { Post } from '../src/types/types';
+import { AuthenticationError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
 
@@ -13,7 +13,7 @@ describe('(1) WPApiHandler', () => {
   const serverAddress = 'https://dev.htlweiz.at/wordpress';
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: `Basic ${encode(login)}`,
+    'Authorization': `Basic ${encode(login)}`,
   };
 
   describe('(1) constructor', () => {
@@ -28,9 +28,13 @@ describe('(1) WPApiHandler', () => {
     it('(1) should return the total number of posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
-      const totalPosts = await wpa.post_len();
+      try {
+        const totalPosts = await wpa.post_len();
 
-      expect(totalPosts).toBeGreaterThan(0);
+        expect(totalPosts).toBeGreaterThan(0);
+      } catch (error) {
+        fail();
+      }
     });
   });
 
@@ -139,8 +143,51 @@ describe('(1) WPApiHandler', () => {
         fail();
       }
     });
+
+    it('(3) should throw an error if the password is incorrect', async () => {
+      const wrong_headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${encode('wpapihandler:test')}`,
+      }
+      
+      const wpa = new WPApiHandler(serverAddress, wrong_headers);
+
+      try {
+        const result: boolean = await wpa.check_connection();
+
+        fail();
+      } catch (error) {
+        if (error instanceof AuthenticationError) {
+          expect(error.message).toEqual('Authentication failed because of: incorrect_password');
+        } else {
+          fail();
+        }
+      }
+    });
+
+    it('(4) should throw an error if the user could not be found', async () => {
+      const wrong_headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${encode('test:test')}`,
+      }
+
+      const wpa = new WPApiHandler(serverAddress, wrong_headers);
+
+      try {
+        const result: boolean = await wpa.check_connection();
+
+        fail();
+      } catch (error) {
+        if (error instanceof AuthenticationError) {
+          expect(error.message).toEqual('Authentication failed because of: invalid_username');
+        } else {
+          fail();
+        }
+      }
+    });
   });
 });
+
 
 function isPost(post: any): boolean {
   return (
