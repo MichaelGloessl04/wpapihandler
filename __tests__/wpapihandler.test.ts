@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 require('dotenv').config();
 
 
-describe('(1) WPApiHandler', () => {
+describe('WPApiHandler', () => {
   const encode = (str: string): string =>
       Buffer.from(str, 'binary').toString('base64');
   const login = `${process.env.LOGIN}:${process.env.PASSWORD}`
@@ -16,16 +16,16 @@ describe('(1) WPApiHandler', () => {
     'Authorization': `Basic ${encode(login)}`,
   };
 
-  describe('(1) constructor', () => {
-    it('(1) should create a new instance of WPApiHandler', () => {
+  describe('constructor', () => {
+    it('should create a new instance of WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       expect(wpa).toBeInstanceOf(WPApiHandler);
     });
   });
 
-  describe('(2) post_len', () => {
-    it('(1) should return the total number of posts', async () => {
+  describe('post_len', () => {
+    it('should return the total number of posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -38,8 +38,8 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(3) get_posts', () => {
-    it('(1) should return all posts', async () => {
+  describe('get_posts', () => {
+    it('should return all posts', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -55,7 +55,7 @@ describe('(1) WPApiHandler', () => {
       }
     }, 10000);
 
-    it('(2) should return post with specified id', async () => {
+    it('should return post with specified id', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -78,8 +78,8 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(4) get_tags', () => {
-    it('(1) should return all tags', async () => {
+  describe('get_tags', () => {
+    it('should return all tags', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: number[] = [49];
 
@@ -93,7 +93,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(2) should return empty array if no tags are found', async () => {
+    it('should return empty array if no tags are found', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: number[] = [];
 
@@ -106,7 +106,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(3) should throw a TypeError if tag_ids is not an array of numbers', async () => {
+    it('should throw a TypeError if tag_ids is not an array of numbers', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tag_ids: any = 'test';
 
@@ -119,8 +119,8 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(5) check_connection', () => {
-    it('(1) should return true if connection is established', async () => {
+  describe('check_connection', () => {
+    it('should return true if connection is established', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -132,7 +132,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(2) should return false if connection is not established', async () => {
+    it('should return false if connection is not established', async () => {
       const wpa = new WPApiHandler('https://example.com', headers);
 
       try {
@@ -144,7 +144,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(3) should throw an error if the password is incorrect', async () => {
+    it('should throw an error if the password is incorrect', async () => {
       const wrong_headers = {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${encode('wpapihandler:test')}`,
@@ -165,7 +165,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(4) should throw an error if the user could not be found', async () => {
+    it('should throw an error if the user could not be found', async () => {
       const wrong_headers = {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${encode('test:test')}`,
@@ -187,8 +187,8 @@ describe('(1) WPApiHandler', () => {
     });
   });
 
-  describe('(6) add_post', () => {
-    it('(1) should add a new post', async () => {
+  describe('add_post', () => {
+    it('should add a new post', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       const new_post: Post = {
@@ -212,7 +212,7 @@ describe('(1) WPApiHandler', () => {
       }
     });
 
-    it('(2) should throw a TypeError if the post is not of type Post', async () => {
+    it('should throw a TypeError if the post is not of type Post', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       const new_post: any = 12;
