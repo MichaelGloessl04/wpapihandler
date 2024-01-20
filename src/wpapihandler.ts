@@ -103,11 +103,11 @@ export class WPApiHandler {
     }
 
     /**
-     * Asynchronously creates a new post on the WordPress site.
+     * Asynchronously posts a post to the WordPress site.
      *
      * @async
-     * @param {Post} [new_post]: The post to be created on the WordPress site.
-     * @returns {Promise<Post>} A promise that resolves to the post that was created.
+     * @param {Post} [new_post]: The post to be posted to the WordPress site.
+     * @returns {Promise<Post>} A promise that resolves to the post that was posted.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -119,43 +119,55 @@ export class WPApiHandler {
      * );
      *
      * const new_post = {
+     *      id: 1910,
      *      title: 'New Post',
      *      content: 'This is a new post.',
      *      status: 'publish',
-     *      tags: [1, 2, 3],
+     *      tags: ['test'],
      * };
      *
-     * const result = await wpa.post_post(new_post);
+     * const result = await wpa.add_post(new_post);
      * console.log(result);
      */
-    async post_post(new_post: Post): Promise<Post> {
-        let tag_ids: Array<number> = [];
-        for (let tag of new_post.tags) {
-            tag_ids.push(await this.get_tag_slug(tag));
+    async add_post(new_post: Post): Promise<Post> {
+        const tag_ids: Array<number> = [];
+        for (const tag of new_post.tags) {
+            const tagId = await this.get_tag_slug(tag);
+            tag_ids.push(tagId);
         }
 
         const out_post: ApiPost = {
-            id: new_post.id,
             title: new_post.title,
             content: new_post.content,
             status: new_post.status,
             tags: tag_ids,
         };
 
-        const response: AxiosResponse = await axios.post(
-            `${this.server_address}/wp-json/wp/v2/posts/`,
-            new_post,
-            this.headers,
-        );
-
-        let control_post: Post = {
-            id: response.data.id,
-            title: response.data.title.rendered,
-            content: response.data.content.rendered,
-            status: response.data.status,
-            tags: response.data.tags,
-        };
-        return control_post;
+        try {
+            const response: AxiosResponse = await axios.post(
+                `${this.server_address}/wp-json/wp/v2/posts/`,
+                out_post,
+                this.headers,
+            );
+            
+            const control_post: Post = {
+                id: response.data.id,
+                title: response.data.title.rendered,
+                content: response.data.content.rendered,
+                status: response.data.status,
+                tags: await this.get_tags(response.data.tags),
+            };
+            return control_post;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return {
+                id: -1,
+                title: '',
+                content: '',
+                status: '',
+                tags: [],
+            };
+        }
     }
 
     /**

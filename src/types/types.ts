@@ -1,5 +1,5 @@
 export type Post = {
-    id: number;
+    id?: number;
     title: string;
     content: string;
     status: string;
@@ -8,7 +8,7 @@ export type Post = {
 };
 
 export type ApiPost = {
-    id: number;
+    id?: number;
     title: string;
     content: string;
     status: string;
