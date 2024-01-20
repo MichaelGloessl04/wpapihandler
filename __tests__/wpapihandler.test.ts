@@ -186,6 +186,45 @@ describe('(1) WPApiHandler', () => {
       }
     });
   });
+
+  describe('(6) add_post', () => {
+    it('(1) should add a new post', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      const new_post: Post = {
+        title: 'New Post',
+        content: 'This is a new post.',
+        status: 'draft',
+        tags: ['test'],
+      };
+
+      try {
+        const result: Post = await wpa.add_post(new_post);
+
+        expect(isPost(result)).toBe(true);
+        expect(result.title).toEqual(new_post.title);
+        const striped = result.content.replace(/(<([^>]+)>)/gi, '').replace(/\n/g, '');
+        expect(striped).toEqual(new_post.content);
+        expect(result.status).toEqual(new_post.status);
+        expect(result.tags).toEqual(new_post.tags);
+      } catch (error) {
+        fail();
+      }
+    });
+
+    it('(2) should throw a TypeError if the post is not of type Post', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      const new_post: any = 12;
+
+      try {
+        await wpa.add_post(new_post);
+        fail();
+      } catch (error) {
+        expect(error).toBeInstanceOf(TypeError);
+      }
+    });
+  });
 });
 
 
