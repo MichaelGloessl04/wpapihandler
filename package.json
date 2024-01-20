@@ -24,6 +24,7 @@
     "release": "pnpm run build && changeset publish",
     "lint": "tsc",
     "docs": "typedoc --out docs src",
+    "test-docs": "py scripts/generate_test_docs.py",
     "test": "jest",
     "prettier-format": "prettier --config .prettierrc index.ts --write"
   },
