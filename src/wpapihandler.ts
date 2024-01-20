@@ -129,6 +129,11 @@ export class WPApiHandler {
      * console.log(result);
      */
     async post_post(new_post: Post): Promise<Post> {
+        let tag_ids: Array<number> = [];
+        for (let tag of new_post.tags) {
+            tag_ids.push(await this.get_tag_slug(tag));
+        }
+        new_post.tags = tag_ids;
         const response: AxiosResponse = await axios.post(
             `${this.server_address}/wp-json/wp/v2/posts/`,
             new_post,
@@ -229,6 +234,14 @@ export class WPApiHandler {
         tags = await Promise.all(promises);
 
         return tags;
+    }
+
+    private async get_tag_slug(tag: string): Promise<number> {
+        const response = await axios.get(
+            `${this.server_address}/wp-json/wp/v2/tags?search=${tag}`,
+            this.headers,
+        );
+        return response.data[0].id;
     }
 
     private async get_amount(amount: number): Promise<Array<Post>> {
