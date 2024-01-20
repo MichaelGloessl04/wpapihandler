@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Headers, Post } from './types/types';
+import { Headers, Post, ApiPost } from './types/types';
 import { AuthenticationError } from './errors/error';
 
 
@@ -133,20 +133,29 @@ export class WPApiHandler {
         for (let tag of new_post.tags) {
             tag_ids.push(await this.get_tag_slug(tag));
         }
-        new_post.tags = tag_ids;
+
+        const out_post: ApiPost = {
+            id: new_post.id,
+            title: new_post.title,
+            content: new_post.content,
+            status: new_post.status,
+            tags: tag_ids,
+        };
+
         const response: AxiosResponse = await axios.post(
             `${this.server_address}/wp-json/wp/v2/posts/`,
             new_post,
             this.headers,
         );
-        let post: Post = {
+
+        let control_post: Post = {
             id: response.data.id,
             title: response.data.title.rendered,
             content: response.data.content.rendered,
             status: response.data.status,
             tags: response.data.tags,
         };
-        return post;
+        return control_post;
     }
 
     /**
