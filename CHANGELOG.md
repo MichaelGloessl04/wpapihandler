@@ -1,5 +1,15 @@
 # wpapihandler
 
+## 1.2.2
+
+### Patch Changes
+
+- 5379464: improved error messages for the method check_connection
+- e98ae4e: reimplemented tags into add_post method
+- e98ae4e: renamed post_post method
+- 2251edc: added method get_tag_slug
+- 778db88: hotfix: fixed incorrect examples
+
 ## 1.2.1
 
 ### Patch Changes
