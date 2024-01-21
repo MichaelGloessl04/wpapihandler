@@ -24,9 +24,8 @@ export class WPApiHandler {
      * );
      */
     constructor(server_address: string, headers: Headers) {
-        const axiosHeaders: AxiosRequestConfig['headers'] = headers;
         this.server_address = server_address;
-        this.headers = { headers: axiosHeaders };
+        this.headers = { headers };
     }
 
     /**
@@ -83,20 +82,20 @@ export class WPApiHandler {
      * console.log(post);
      */
     async get_posts(id?: string): Promise<Array<Post>> {
-        let total: number = await this.post_len();
+        const total: number = await this.post_len();
         if (id !== undefined) {
-            let response: AxiosResponse = await axios.get(
+            const response: AxiosResponse = await axios.get(
                 `${this.server_address}/wp-json/wp/v2/posts/${id}`,
                 this.headers
             );
-            let post: Post = {
+            const post: Post = {
                 id: response.data.id,
                 title: response.data.title.rendered,
                 content: response.data.content.rendered,
                 status: response.data.status,
                 tags: await this.get_tags(response.data.tags),
             };
-            return [post];
+            return [ post ];
         } else {
             return await this.get_amount(total);
         }
@@ -241,28 +240,70 @@ export class WPApiHandler {
      * const tags = await wpa.get_tags(tag_ids);
      * console.log(tags);
      */
-    public async get_tags(tag_ids: number[]): Promise<Array<string>> {
-        let tags: Array<string> = [];
-
-        let promises = tag_ids.map(async (tag_id: number) => {
-            let response: AxiosResponse = await axios.get(
+    public async get_tags(tag_ids: number[]): Promise<string[]> {
+        const promises = tag_ids.map(async (tag_id: number) => {
+            const response: AxiosResponse = await axios.get(
                 `${this.server_address}/wp-json/wp/v2/tags/${tag_id}`,
                 this.headers,
             );
             return response.data.name;
         });
 
-        tags = await Promise.all(promises);
+        const tags = await Promise.all(promises);
 
         return tags;
     }
 
-    private async get_tag_slug(tag: string): Promise<number> {
+    /**
+     * Asynchronously retrieves the tag ID by its slug.
+     * 
+     * @async
+     * @param {string} tag - The slug of the tag to be retrieved.
+     * @param {boolean} [createIfNotExists=false] - Whether to create the tag if it does not exist.
+     * @returns {Promise<number>} A promise that resolves to the ID of the tag.
+     * @throws {Error} If the tag does not exist and createIfNotExists is false.
+     * 
+     * @example
+     * const wpa = new WPApiHandler(
+     *     'https://example.com',
+     *    {
+     *       "Content-Type": "application/json",
+     *       "Authorization": "Basic YOURACCESSTOKEN"
+     *    }
+     * );
+     * 
+     * const tag_id = await wpa.get_tag_slug('test');
+     * console.log(tag_id);
+     * 
+     */
+    async get_tag_slug(tag: string, createIfNotExists: boolean = false): Promise<number> {
         const response = await axios.get(
             `${this.server_address}/wp-json/wp/v2/tags?search=${tag}`,
             this.headers,
         );
+
+        if (response.data.length === 0) {
+            if (createIfNotExists) {
+                return await this.add_tag(tag);
+            } else {
+                throw new Error(`Tag slug '${tag}' does not exist.`);
+            }
+        }
+
         return response.data[0].id;
+    }
+
+    private async add_tag(tag: string): Promise<number> {
+        const response = await axios.post(
+            `${this.server_address}/wp-json/wp/v2/tags`,
+            {
+                name: tag,
+                slug: tag,
+            },
+            this.headers,
+        );
+
+        return response.data.id;
     }
 
     private async get_amount(amount: number): Promise<Array<Post>> {

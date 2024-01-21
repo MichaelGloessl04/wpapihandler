@@ -28,3 +28,8 @@
 2.6: add_post
 2.6.1: add_post should add a new post
 2.6.2: add_post should throw a TypeError if the post is not of type Post
+
+2.7: get_tag_slug
+2.7.1: get_tag_slug should return the tag ID if the tag exists
+2.7.2: get_tag_slug should throw an error if the tag does not exist and createIfNotExists is false
+2.7.3: get_tag_slug should create a new tag and return its ID if the tag does not exist and createIfNotExists is true

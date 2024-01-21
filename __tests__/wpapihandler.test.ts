@@ -2,6 +2,7 @@ import { Post } from '../src/types/types';
 import { AuthenticationError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
+import axios from 'axios';
 
 require('dotenv').config();
 
@@ -199,14 +200,20 @@ describe('WPApiHandler', () => {
       };
 
       try {
-        const result: Post = await wpa.add_post(new_post);
+        const created_post: Post = await wpa.add_post(new_post);
 
-        expect(isPost(result)).toBe(true);
-        expect(result.title).toEqual(new_post.title);
-        const striped = result.content.replace(/(<([^>]+)>)/gi, '').replace(/\n/g, '');
+        expect(isPost(created_post)).toBe(true);
+        expect(created_post.title).toEqual(new_post.title);
+        const striped = created_post.content.replace(/(<([^>]+)>)/gi, '').replace(/\n/g, '');
         expect(striped).toEqual(new_post.content);
-        expect(result.status).toEqual(new_post.status);
-        expect(result.tags).toEqual(new_post.tags);
+        expect(created_post.status).toEqual(new_post.status);
+        expect(created_post.tags).toEqual(new_post.tags);
+        await axios.delete(
+            `${serverAddress}/wp-json/wp/v2/posts/${created_post.id}?force=true`,
+            {
+                headers: headers,
+            },
+        );
       } catch (error) {
         fail();
       }
@@ -222,6 +229,58 @@ describe('WPApiHandler', () => {
         fail();
       } catch (error) {
         expect(error).toBeInstanceOf(TypeError);
+      }
+    });
+  });
+
+  describe('get_tag_slug', () => {
+    it('should return the tag ID if the tag exists', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag = 'test';
+
+      try {
+        const tagId: number = await wpa.get_tag_slug(tag);
+
+        expect(tagId).toBeGreaterThan(0);
+      } catch (error) {
+        fail();
+      }
+    });
+
+    it('should throw an error if the tag does not exist and createIfNotExists is false', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag = 'nonexistenttag';
+      const createIfNotExists = false;
+
+      try {
+        await wpa.get_tag_slug(tag, createIfNotExists);
+        fail();
+    } catch (error: any) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toEqual(
+          `Tag slug '${tag}' does not exist.`,
+        );
+      }
+    });
+
+    it('should create a new tag and return its ID if the tag does not exist and createIfNotExists is true', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tag = 'newtag';
+      const createIfNotExists = true;
+
+      try {
+        const tagId: number = await wpa.get_tag_slug(
+          tag,
+          createIfNotExists,
+        );
+
+        expect(tagId).toBeGreaterThan(0);
+
+        await axios.delete(`${serverAddress}/wp-json/wp/v2/tags/${tagId}?force=true`, {
+          headers: headers,
+        });
+      } catch (error) {
+        fail();
       }
     });
   });
