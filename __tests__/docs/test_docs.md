@@ -1,0 +1,90 @@
+# Test Docs
+
+## Table of Contents:
+- 1. dummy.test.ts
+  - 1.1: dummy
+    - 1.1.1: dummy should pass
+- 2. wpapihandler.test.ts
+  - 2.1: constructor
+    - 2.1.1: constructor should create a new instance of WPApiHandler
+  - 2.2: post_len
+    - 2.2.1: post_len should return the total number of posts
+  - 2.3: get_posts
+    - 2.3.1: get_posts should return all posts
+    - 2.3.2: get_posts should return post with specified id
+  - 2.4: get_tags
+    - 2.4.1: get_tags should return all tags
+    - 2.4.2: get_tags should return empty array if no tags are found
+    - 2.4.3: get_tags should throw a TypeError if tag_ids is not an array of numbers
+  - 2.5: check_connection
+    - 2.5.1: check_connection should return true if connection is established
+    - 2.5.2: check_connection should return false if connection is not established
+    - 2.5.3: check_connection should throw an error if the password is incorrect
+    - 2.5.4: check_connection should throw an error if the user could not be found
+  - 2.6: add_post
+    - 2.6.1: add_post should add a new post
+    - 2.6.2: add_post should throw a TypeError if the post is not of type Post
+  - 2.7: get_tag_slug
+    - 2.7.1: get_tag_slug should return the tag ID if the tag exists
+    - 2.7.2: get_tag_slug should throw an error if the tag does not exist and createIfNotExists is false
+    - 2.7.3: get_tag_slug should create a new tag and return its ID if the tag does not exist and createIfNotExists is true
+
+
+## Test Docs:
+### 1. dummy.test.ts
+#### 1.1: dummy
+##### 1.1.1: dummy should pass
+@description
+
+_expect:_
+- n
+
+_fails:_
+- n
+
+
+### 2. wpapihandler.test.ts
+#### 2.1: constructor
+##### 2.1.1: constructor should create a new instance of WPApiHandler
+
+
+#### 2.2: post_len
+##### 2.2.1: post_len should return the total number of posts
+
+
+#### 2.3: get_posts
+##### 2.3.1: get_posts should return all posts
+
+##### 2.3.2: get_posts should return post with specified id
+
+
+#### 2.4: get_tags
+##### 2.4.1: get_tags should return all tags
+
+##### 2.4.2: get_tags should return empty array if no tags are found
+
+##### 2.4.3: get_tags should throw a TypeError if tag_ids is not an array of numbers
+
+
+#### 2.5: check_connection
+##### 2.5.1: check_connection should return true if connection is established
+
+##### 2.5.2: check_connection should return false if connection is not established
+
+##### 2.5.3: check_connection should throw an error if the password is incorrect
+
+##### 2.5.4: check_connection should throw an error if the user could not be found
+
+
+#### 2.6: add_post
+##### 2.6.1: add_post should add a new post
+
+##### 2.6.2: add_post should throw a TypeError if the post is not of type Post
+
+
+#### 2.7: get_tag_slug
+##### 2.7.1: get_tag_slug should return the tag ID if the tag exists
+
+##### 2.7.2: get_tag_slug should throw an error if the tag does not exist and createIfNotExists is false
+
+##### 2.7.3: get_tag_slug should create a new tag and return its ID if the tag does not exist and createIfNotExists is true
