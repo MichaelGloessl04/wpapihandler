@@ -2,7 +2,8 @@ import { Post } from '../src/types/types';
 import { AuthenticationError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { assert } from 'console';
 
 require('dotenv').config();
 
@@ -281,6 +282,46 @@ describe('WPApiHandler', () => {
         });
       } catch (error) {
         fail();
+      }
+    });
+  });
+
+  describe('remove_post', () => {
+    it('should remove the post with the specified id', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const new_post: Post = {
+        title: 'New Post',
+        content: 'This is a new post.',
+        status: 'draft',
+        tags: ['test'],
+      };
+
+      let post_id:number = 0;
+
+      try {
+        const response: AxiosResponse = await axios.post(
+          `${serverAddress}/wp-json/wp/v2/posts`,
+          new_post,
+          {
+            headers: headers,
+          },
+        );
+        post_id = response.data.id;
+        await wpa.remove_post(post_id);
+      } catch (error) {
+        fail();
+      }
+      try {
+        const response: AxiosResponse = await axios.get(
+          `${serverAddress}/wp-json/wp/v2/posts/${post_id}`,
+          {
+            headers: headers,
+          },
+        );
+        fail();
+      } catch (error: any) {
+        expect(error.response.status).toEqual(404);
+        expect(error.response.data.code).toEqual('rest_post_invalid_id');
       }
     });
   });
