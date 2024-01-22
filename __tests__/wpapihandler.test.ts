@@ -288,6 +288,11 @@ describe('WPApiHandler', () => {
 
   describe('remove_post', () => {
     it('should remove the post with the specified id', async () => {
+      /**
+       * @description Create a new post and remove it afterwards.
+       * @expect The post should be removed and a 404 error should be thrown when trying to get the post.
+       * @fails if the post could not be removed or the post could be found after removal.
+       */
       const wpa = new WPApiHandler(serverAddress, headers);
       const new_post = {
         title: 'New Post',
