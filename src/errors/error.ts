@@ -4,3 +4,11 @@ export class AuthenticationError extends Error {
         this.name = 'AuthenticationError';
     }
 }
+
+
+export class PostNotFoundError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'PostNotFoundError';
+    }
+}
