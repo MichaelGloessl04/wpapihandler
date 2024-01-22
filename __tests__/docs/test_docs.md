@@ -28,6 +28,8 @@
     - 2.7.1: get_tag_slug should return the tag ID if the tag exists
     - 2.7.2: get_tag_slug should throw an error if the tag does not exist and createIfNotExists is false
     - 2.7.3: get_tag_slug should create a new tag and return its ID if the tag does not exist and createIfNotExists is true
+  - 2.8: remove_post
+    - 2.8.1: remove_post should remove the post with the specified id
 
 
 ## Test Docs:
@@ -214,3 +216,14 @@ _expect:_
 
 _fails:_
 - if the method does not return the tag ID or throws an error
+
+
+#### 2.8: remove_post
+##### 2.8.1: remove_post should remove the post with the specified id
+Create a new post and remove it afterwards.
+
+_expect:_
+- The post should be removed and a 404 error should be thrown when trying to get the post.
+
+_fails:_
+- if the post could not be removed or the post could be found after removal.
