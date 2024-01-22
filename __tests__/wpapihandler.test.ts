@@ -289,11 +289,10 @@ describe('WPApiHandler', () => {
   describe('remove_post', () => {
     it('should remove the post with the specified id', async () => {
       const wpa = new WPApiHandler(serverAddress, headers);
-      const new_post: Post = {
+      const new_post = {
         title: 'New Post',
         content: 'This is a new post.',
-        status: 'draft',
-        tags: ['test'],
+        status: 'draft'
       };
 
       let post_id:number = 0;
@@ -307,6 +306,7 @@ describe('WPApiHandler', () => {
           },
         );
         post_id = response.data.id;
+        expect(response.data.id).toBeGreaterThan(0);
         await wpa.remove_post(post_id);
       } catch (error) {
         fail();

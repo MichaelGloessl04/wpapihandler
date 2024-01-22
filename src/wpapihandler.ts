@@ -170,6 +170,35 @@ export class WPApiHandler {
     }
 
     /**
+     * Asynchronously removes a post from the WordPress site.
+     *
+     * @async
+     * @param {number} [id]: The ID of the post to be removed from the WordPress site.
+     * @returns {Promise<void>} A promise that resolves to void.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * await wpa.remove_post(1910);
+     */
+    async remove_post(id: number): Promise<void> {
+        try {
+            await axios.delete(
+                `${this.server_address}/wp-json/wp/v2/posts/${id}?force=true`,
+                this.headers,
+            );
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    /**
      * Asynchronously updates a post on the WordPress site.
      *
      * @async
