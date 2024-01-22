@@ -426,6 +426,26 @@ describe('WPApiHandler', () => {
         expect(error.response.data.code).toEqual('rest_post_invalid_id');
       }
     });
+
+    it('should throw PostNotFoundError if the post does not exist', async () => {
+      /**
+       * @description Test if the method remove_post throws a PostNotFoundError if the post does not exist
+       * @expect a PostNotFoundError is thrown
+       * @fails if the method does not throw a PostNotFoundError or throws a different error
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const post_id = 0;
+
+      try {
+        await wpa.remove_post(post_id);
+        fail();
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(PostNotFoundError);
+        expect(error.message).toEqual(
+          `Post with id '${post_id}' does not exist.`,
+        );
+      }
+    });
   });
 });
 
