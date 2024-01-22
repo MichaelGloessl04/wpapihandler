@@ -1,9 +1,8 @@
 import { Post } from '../src/types/types';
-import { AuthenticationError } from '../src/errors/error';
+import { AuthenticationError, PostNotFoundError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { assert } from 'console';
+import axios, { AxiosResponse } from 'axios';
 
 require('dotenv').config();
 
@@ -87,7 +86,7 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const posts: Array<Post> = await wpa.get_posts('1910');
+        const posts: Array<Post> = await wpa.get_posts(1910);
         if (posts.length > 0) {
           const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
           expect(isPost(post)).toBe(true);
@@ -103,6 +102,26 @@ describe('WPApiHandler', () => {
       } catch (error) {
         fail();
       }
+    });
+
+    it('should throw PostNotFoundError if the post does not exist', async () => {
+        /**
+         * @description Test if the method remove_post throws a PostNotFoundError if the post does not exist
+         * @expect a PostNotFoundError is thrown
+         * @fails if the method does not throw a PostNotFoundError or throws a different error
+         */
+        const wpa = new WPApiHandler(serverAddress, headers);
+        const post_id = 0;
+
+        try {
+            await wpa.get_posts(post_id);
+            fail();
+        } catch (error: any) {
+            expect(error).toBeInstanceOf(PostNotFoundError);
+            expect(error.message).toEqual(
+                `Post with ID '${post_id}' does not exist.`,
+            );
+        }
     });
   });
 

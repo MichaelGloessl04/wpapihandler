@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Headers, Post, ApiPost } from './types/types';
-import { AuthenticationError } from './errors/error';
+import { AuthenticationError, PostNotFoundError } from './errors/error';
 
 
 export class WPApiHandler {
@@ -63,8 +63,9 @@ export class WPApiHandler {
      * Asynchronously retrieves posts from the WordPress site.
      *
      * @async
-     * @param {string} [id]: The ID of the post to be retrieved.
+     * @param {number} [id]: The ID of the post to be retrieved.
      * @returns {Promise<Post[]>} A promise that resolves to an array of posts.
+     * @throws {@link PostNotFoundError} If the post does not exist.
      *
      * @example
      * const wpa = new WPApiHandler(
@@ -78,24 +79,33 @@ export class WPApiHandler {
      * const posts = await wpa.get_posts();
      * console.log(posts);
      *
-     * const post = await wpa.get_posts('1910');
+     * const post = await wpa.get_posts(1910);
      * console.log(post);
      */
-    async get_posts(id?: string): Promise<Array<Post>> {
+    async get_posts(id?: number): Promise<Array<Post>> {
         const total: number = await this.post_len();
         if (id !== undefined) {
-            const response: AxiosResponse = await axios.get(
-                `${this.server_address}/wp-json/wp/v2/posts/${id}`,
-                this.headers
-            );
-            const post: Post = {
-                id: response.data.id,
-                title: response.data.title.rendered,
-                content: response.data.content.rendered,
-                status: response.data.status,
-                tags: await this.get_tags(response.data.tags),
-            };
-            return [ post ];
+            try {
+                const response: AxiosResponse = await axios.get(
+                    `${this.server_address}/wp-json/wp/v2/posts/${id}`,
+                    this.headers
+                );
+                const post: Post = {
+                    id: response.data.id,
+                    title: response.data.title.rendered,
+                    content: response.data.content.rendered,
+                    status: response.data.status,
+                    tags: await this.get_tags(response.data.tags),
+                };
+                return [ post ];
+            } catch (error: any) {
+                if (error.response.data.code === 'rest_post_invalid_id') {
+                    throw new PostNotFoundError(`Post with ID '${id}' does not exist.`);
+                } else {
+                    console.error('Error fetching data:', error.response.data.code);
+                    return [];
+                }
+            }
         } else {
             return await this.get_amount(total);
         }
