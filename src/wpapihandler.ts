@@ -63,7 +63,8 @@ export class WPApiHandler {
      * Asynchronously retrieves posts from the WordPress site.
      *
      * @async
-     * @param {string} [id]: The ID of the post to be retrieved.
+     * @param {number} [id]: The ID of the post to be retrieved.
+     * @param {string[]} [tags]: The tags of the posts to be retrieved.
      * @returns {Promise<Post[]>} A promise that resolves to an array of posts.
      *
      * @example
@@ -78,10 +79,13 @@ export class WPApiHandler {
      * const posts = await wpa.get_posts();
      * console.log(posts);
      *
-     * const post = await wpa.get_posts('1910');
+     * const post = await wpa.get_posts(1910);
      * console.log(post);
+     * 
+     * const posts = await wpa.get_posts(undefined, ['test']);
+     * console.log(posts);
      */
-    async get_posts(id?: string): Promise<Array<Post>> {
+    async get_posts(id?: number, tags?: string[]): Promise<Array<Post>> {
         const total: number = await this.post_len();
         if (id !== undefined) {
             const response: AxiosResponse = await axios.get(
@@ -96,6 +100,37 @@ export class WPApiHandler {
                 tags: await this.get_tags(response.data.tags),
             };
             return [ post ];
+        } else if (tags !== undefined) {
+            const tag_ids: Array<number> = [];
+            for (const tag of tags) {
+                const tagId = await this.get_tag_slug(tag);
+                tag_ids.push(tagId);
+            }
+
+            const response: AxiosResponse = await axios.get(
+                `${this.server_address}/wp-json/wp/v2/posts?tags=${tag_ids.join(',')}`,
+                this.headers,
+            );
+
+            const posts: Array<Post> = [];
+            
+            try {
+                for (const post of response.data) {
+                    let current_post: Post = {
+                        id: post.id,
+                        title: post.title.rendered,
+                        content: post.content.rendered,
+                        status: post.status,
+                        tags: await this.get_tags(post.tags),
+                    };
+                    posts.push(current_post);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return [];
+            }
+
+            return posts;
         } else {
             return await this.get_amount(total);
         }

@@ -60,7 +60,7 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
-        const posts: Array<Post> = await wpa.get_posts('1910');
+        const posts: Array<Post> = await wpa.get_posts(1910);
         if (posts.length > 0) {
           const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
           expect(isPost(post)).toBe(true);
@@ -73,6 +73,22 @@ describe('WPApiHandler', () => {
         } else {
           fail('No posts returned');
         }
+      } catch (error) {
+        fail();
+      }
+    });
+  
+    it('should return all posts with specified tags', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tags: string[] = ['test'];
+
+      try {
+        const posts: Array<Post> = await wpa.get_posts(undefined, tags);
+        expect(posts.length).toEqual(1);
+        posts.forEach((post) => {
+          expect(isPost(post)).toBe(true);
+          expect(post.tags).toEqual(tags);
+        });
       } catch (error) {
         fail();
       }
