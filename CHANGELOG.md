@@ -1,5 +1,13 @@
 # wpapihandler
 
+## 1.2.3
+
+### Patch Changes
+
+- 0feac36: missing feature: filter get_posts by tags
+- Updated dependencies [0feac36]
+  - wpapihandler@1.2.3
+
 ## 1.2.2
 
 ### Patch Changes
