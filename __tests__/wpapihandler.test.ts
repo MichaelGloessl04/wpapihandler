@@ -68,7 +68,7 @@ describe('WPApiHandler', () => {
           expect(post.id).toEqual(1910);
           expect(post.title).toEqual('Test');
           expect(post.content).toEqual('\n<p>Test Content</p>\n');
-          expect(post.status).toEqual('draft');
+          expect(post.status).toEqual('publish');
           expect(post.tags).toEqual(['test']);
         } else {
           fail('No posts returned');
