@@ -328,6 +328,24 @@ export class WPApiHandler {
         return response.data[0].id;
     }
 
+    /**
+     * Asynchronously retrieves the partners from the WordPress site.
+     *
+     * @async
+     * @returns {Promise<Partner[]>} A promise that resolves to an array of partners.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * const partners = await wpa.get_partners();
+     * console.log(partners);
+     */
     public async get_partners(): Promise<Array<Partner>> {
         const response: AxiosResponse = await axios.get(
             `${this.server_address}/wp-json/wp/v2/partners/`,
