@@ -1,4 +1,4 @@
-import { Post } from '../src/types/types';
+import { Post, Partner } from '../src/types/types';
 import { AuthenticationError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -300,6 +300,24 @@ describe('WPApiHandler', () => {
       }
     });
   });
+
+  describe('get_partners', () => {
+    it('should return all partners', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      try {
+        const partners: Array<Partner> = await wpa.get_partners();
+
+        expect(partners.length).toBeGreaterThan(0);
+
+        for(const partner of partners) {
+          expect(isPartner(partner)).toBe(true);
+        }
+      } catch (error) {
+        fail();
+      }
+    });
+  });
 });
 
 
@@ -310,5 +328,15 @@ function isPost(post: any): boolean {
     post.hasOwnProperty('content') &&
     post.hasOwnProperty('status') &&
     post.hasOwnProperty('tags')
+  );
+}
+
+
+function isPartner(partner: any): boolean {
+  return (
+    partner.hasOwnProperty('id') &&
+    partner.hasOwnProperty('name') &&
+    partner.hasOwnProperty('logo') &&
+    partner.hasOwnProperty('url')
   );
 }
