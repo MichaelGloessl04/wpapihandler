@@ -1,6 +1,7 @@
 import { WPApiHandler } from "./wpapihandler";
 import { Headers, Post, Partner} from "./types/types";
-import { AuthenticationError } from "./errors/error";
+import { AuthenticationError, PostNotFoundError } from "./errors/error";
+
 
 export {
     WPApiHandler,
@@ -8,4 +9,5 @@ export {
     Headers,
     Partner,
     AuthenticationError,
+    PostNotFoundError
 }
