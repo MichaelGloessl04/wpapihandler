@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Headers, Post, ApiPost } from './types/types';
+import { Headers, Post, ApiPost, Partner } from './types/types';
 import { AuthenticationError } from './errors/error';
 
 
@@ -326,6 +326,24 @@ export class WPApiHandler {
         }
 
         return response.data[0].id;
+    }
+
+    public async get_partners(): Promise<Array<Partner>> {
+        const response: AxiosResponse = await axios.get(
+            `${this.server_address}/wp-json/wp/v2/partners/`,
+            this.headers,
+        );
+
+        const partners: Array<Partner> = response.data.map((partner: Partner) => {
+            return {
+                id: partner.id,
+                name: partner.name,
+                logo: partner.logo,
+                url: partner.url,
+            };
+        });
+
+        return partners;
     }
 
     private async add_tag(tag: string): Promise<number> {
