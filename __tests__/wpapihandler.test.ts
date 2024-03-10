@@ -1,4 +1,4 @@
-import { Post } from '../src/types/types';
+import { Post, Partner } from '../src/types/types';
 import { AuthenticationError, PostNotFoundError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -94,7 +94,7 @@ describe('WPApiHandler', () => {
           expect(post.id).toEqual(1910);
           expect(post.title).toEqual('Test');
           expect(post.content).toEqual('\n<p>Test Content</p>\n');
-          expect(post.status).toEqual('draft');
+          expect(post.status).toEqual('publish');
           expect(post.tags).toEqual(['test']);
         } else {
           fail();
@@ -122,6 +122,42 @@ describe('WPApiHandler', () => {
                 `Post with ID '${post_id}' does not exist.`,
             );
         }
+    });
+
+    it('should throw PostNotFoundError if the post does not exist', async () => {
+        /**
+         * @description Test if the method remove_post throws a PostNotFoundError if the post does not exist
+         * @expect a PostNotFoundError is thrown
+         * @fails if the method does not throw a PostNotFoundError or throws a different error
+         */
+        const wpa = new WPApiHandler(serverAddress, headers);
+        const post_id = 0;
+
+        try {
+            await wpa.get_posts(post_id);
+            fail();
+        } catch (error: any) {
+            expect(error).toBeInstanceOf(PostNotFoundError);
+            expect(error.message).toEqual(
+                `Post with ID '${post_id}' does not exist.`,
+            );
+        }
+    });
+  
+    it('should return all posts with specified tags', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const tags: string[] = ['test'];
+
+      try {
+        const posts: Array<Post> = await wpa.get_posts(undefined, tags);
+        expect(posts.length).toEqual(1);
+        posts.forEach((post) => {
+          expect(isPost(post)).toBe(true);
+          expect(post.tags).toEqual(tags);
+        });
+      } catch (error) {
+        fail();
+      }
     });
   });
 
@@ -446,6 +482,24 @@ describe('WPApiHandler', () => {
       }
     });
   });
+
+  describe('get_partners', () => {
+    it('should return all partners', async () => {
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      try {
+        const partners: Array<Partner> = await wpa.get_partners();
+
+        expect(partners.length).toBeGreaterThan(0);
+
+        for(const partner of partners) {
+          expect(isPartner(partner)).toBe(true);
+        }
+      } catch (error) {
+        fail();
+      }
+    });
+  });
 });
 
 
@@ -456,5 +510,15 @@ function isPost(post: any): boolean {
     post.hasOwnProperty('content') &&
     post.hasOwnProperty('status') &&
     post.hasOwnProperty('tags')
+  );
+}
+
+
+function isPartner(partner: any): boolean {
+  return (
+    partner.hasOwnProperty('id') &&
+    partner.hasOwnProperty('name') &&
+    partner.hasOwnProperty('logo') &&
+    partner.hasOwnProperty('url')
   );
 }

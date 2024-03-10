@@ -21,3 +21,11 @@ export type Headers = {
     Authorization: string;
     [key: string]: string;
 };
+
+export type Partner = {
+    id?: number;
+    name: string;
+    logo: string;
+    url: string;
+    [key: string]: any;
+};

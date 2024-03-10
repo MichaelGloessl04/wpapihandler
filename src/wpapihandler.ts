@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Headers, Post, ApiPost } from './types/types';
+import { Headers, Post, ApiPost, Partner } from './types/types';
 import { AuthenticationError, PostNotFoundError } from './errors/error';
 
 
@@ -64,6 +64,7 @@ export class WPApiHandler {
      *
      * @async
      * @param {number} [id]: The ID of the post to be retrieved.
+     * @param {string[]} [tags]: The tags of the posts to be retrieved.
      * @returns {Promise<Post[]>} A promise that resolves to an array of posts.
      * @throws {@link PostNotFoundError} If the post does not exist.
      *
@@ -81,8 +82,11 @@ export class WPApiHandler {
      *
      * const post = await wpa.get_posts(1910);
      * console.log(post);
+     * 
+     * const posts = await wpa.get_posts(undefined, ['test']);
+     * console.log(posts);
      */
-    async get_posts(id?: number): Promise<Array<Post>> {
+    async get_posts(id?: number, tags?: string[]): Promise<Array<Post>> {
         const total: number = await this.post_len();
         if (id !== undefined) {
             try {
@@ -106,6 +110,37 @@ export class WPApiHandler {
                     return [];
                 }
             }
+        } else if (tags !== undefined) {
+            const tag_ids: Array<number> = [];
+            for (const tag of tags) {
+                const tagId = await this.get_tag_slug(tag);
+                tag_ids.push(tagId);
+            }
+
+            const response: AxiosResponse = await axios.get(
+                `${this.server_address}/wp-json/wp/v2/posts?tags=${tag_ids.join(',')}`,
+                this.headers,
+            );
+
+            const posts: Array<Post> = [];
+            
+            try {
+                for (const post of response.data) {
+                    let current_post: Post = {
+                        id: post.id,
+                        title: post.title.rendered,
+                        content: post.content.rendered,
+                        status: post.status,
+                        tags: await this.get_tags(post.tags),
+                    };
+                    posts.push(current_post);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return [];
+            }
+
+            return posts;
         } else {
             return await this.get_amount(total);
         }
@@ -330,6 +365,42 @@ export class WPApiHandler {
         }
 
         return response.data[0].id;
+    }
+
+    /**
+     * Asynchronously retrieves the partners from the WordPress site.
+     *
+     * @async
+     * @returns {Promise<Partner[]>} A promise that resolves to an array of partners.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * const partners = await wpa.get_partners();
+     * console.log(partners);
+     */
+    public async get_partners(): Promise<Array<Partner>> {
+        const response: AxiosResponse = await axios.get(
+            `${this.server_address}/wp-json/wp/v2/partners/`,
+            this.headers,
+        );
+
+        const partners: Array<Partner> = response.data.map((partner: Partner) => {
+            return {
+                id: partner.id,
+                name: partner.name,
+                logo: partner.logo,
+                url: partner.url,
+            };
+        });
+
+        return partners;
     }
 
     private async add_tag(tag: string): Promise<number> {
