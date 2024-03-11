@@ -1,5 +1,22 @@
 # wpapihandler
 
+## 1.3.0
+
+### Minor Changes
+
+- d915001: added method get_partners()
+
+### Patch Changes
+
+- 0918422: Added attribute to get_partners method:
+
+  - the project attr to filter results
+  - added missing entitiies ´level´ and ´project´ to the type Partner
+
+- Updated dependencies [0918422]
+- Updated dependencies [d915001]
+  - wpapihandler@1.3.0
+
 ## 1.2.3
 
 ### Patch Changes
