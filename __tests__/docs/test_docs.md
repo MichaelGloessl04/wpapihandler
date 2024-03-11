@@ -13,6 +13,8 @@
     - 2.3.1: get_posts should return all posts
     - 2.3.2: get_posts should return post with specified id
     - 2.3.3: get_posts should throw PostNotFoundError if the post does not exist
+    - 2.3.4: get_posts should throw PostNotFoundError if the post does not exist
+    - 2.3.5: get_posts should return all posts with specified tags
   - 2.4: get_tags
     - 2.4.1: get_tags should return all tags
     - 2.4.2: get_tags should return empty array if no tags are found
@@ -31,6 +33,8 @@
     - 2.7.3: get_tag_slug should create a new tag and return its ID if the tag does not exist and createIfNotExists is true
   - 2.8: remove_post
     - 2.8.1: remove_post should remove the post with the specified id
+  - 2.9: get_partners
+    - 2.9.1: get_partners should return all partners
 
 
 ## Test Docs:
@@ -92,6 +96,26 @@ _fails:_
 - if the method does not return all posts or throws an error
 
 ##### 2.3.3: get_posts should throw PostNotFoundError if the post does not exist
+Test if the method get_posts returns all posts
+
+_expect:_
+- every returned object is a post
+- more than 0 posts are returned
+
+_fails:_
+- if the method does not return all posts or throws an error
+
+##### 2.3.4: get_posts should throw PostNotFoundError if the post does not exist
+Test if the method get_posts returns all posts
+
+_expect:_
+- every returned object is a post
+- more than 0 posts are returned
+
+_fails:_
+- if the method does not return all posts or throws an error
+
+##### 2.3.5: get_posts should return all posts with specified tags
 Test if the method get_posts returns all posts
 
 _expect:_
@@ -238,3 +262,15 @@ _expect:_
 
 _fails:_
 - if the post could not be removed or the post could be found after removal.
+
+
+#### 2.9: get_partners
+##### 2.9.1: get_partners should return all partners
+Test if the method get_partners returns all partners
+
+_expect:_
+- every returned object is a partner
+- more than 0 partners are returned
+
+_fails:_
+- if the method does not return all partners or throws an error

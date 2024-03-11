@@ -371,6 +371,7 @@ export class WPApiHandler {
      * Asynchronously retrieves the partners from the WordPress site.
      *
      * @async
+     * @param {string} [project]: The project of the partners to be retrieved.
      * @returns {Promise<Partner[]>} A promise that resolves to an array of partners.
      *
      * @example
@@ -384,10 +385,19 @@ export class WPApiHandler {
      *
      * const partners = await wpa.get_partners();
      * console.log(partners);
+     *
+     * const partners = await wpa.get_partners('Test');
+     * console.log(partners);
      */
-    public async get_partners(): Promise<Array<Partner>> {
+    public async get_partners(project?: string): Promise<Array<Partner>> {
+        let url = `${this.server_address}/wp-json/wp/v2/partners/`
+
+        if (project !== undefined) {
+            url += `?project=${project}`;
+        }
+
         const response: AxiosResponse = await axios.get(
-            `${this.server_address}/wp-json/wp/v2/partners/`,
+            url,
             this.headers,
         );
 
@@ -397,6 +407,8 @@ export class WPApiHandler {
                 name: partner.name,
                 logo: partner.logo,
                 url: partner.url,
+                level: partner.level,
+                project: partner.project,
             };
         });
 

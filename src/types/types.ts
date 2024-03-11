@@ -27,5 +27,7 @@ export type Partner = {
     name: string;
     logo: string;
     url: string;
+    level: string;
+    project: string;
     [key: string]: any;
 };

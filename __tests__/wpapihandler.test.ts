@@ -485,6 +485,12 @@ describe('WPApiHandler', () => {
 
   describe('get_partners', () => {
     it('should return all partners', async () => {
+      /**
+       * @description Test if the method get_partners returns all partners
+       * @expect every returned object is a partner
+       * @expect more than 0 partners are returned
+       * @fails if the method does not return all partners or throws an error
+       */
       const wpa = new WPApiHandler(serverAddress, headers);
 
       try {
@@ -519,6 +525,8 @@ function isPartner(partner: any): boolean {
     partner.hasOwnProperty('id') &&
     partner.hasOwnProperty('name') &&
     partner.hasOwnProperty('logo') &&
-    partner.hasOwnProperty('url')
+    partner.hasOwnProperty('url') &&
+    partner.hasOwnProperty('project') &&
+    partner.hasOwnProperty('level')
   );
 }
