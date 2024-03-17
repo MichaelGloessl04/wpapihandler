@@ -94,7 +94,7 @@ describe('WPApiHandler', () => {
           expect(post.id).toEqual(1910);
           expect(post.title).toEqual('Test');
           expect(post.content).toEqual(
-              '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img loading="lazy" decoding="async" width="400" height="400" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143" srcset="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png 400w, https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3-300x300.png 300w, https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3-150x150.png 150w" sizes="(max-width: 400px) 100vw, 400px" /></figure>\n',
+              '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img decoding="async" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143"/></figure>\n',
           );
           expect(post.status).toEqual('publish');
           expect(post.tags).toEqual(['test']);
