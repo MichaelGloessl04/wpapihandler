@@ -35,6 +35,8 @@
     - 2.8.1: remove_post should remove the post with the specified id
   - 2.9: get_partners
     - 2.9.1: get_partners should return all partners
+  - 2.10: get_personnel
+    - 2.10.1: get_personnel should return all personnel
 
 
 ## Test Docs:
@@ -274,3 +276,15 @@ _expect:_
 
 _fails:_
 - if the method does not return all partners or throws an error
+
+
+#### 2.10: get_personnel
+##### 2.10.1: get_personnel should return all personnel
+Test if the method get_personnel returns all personnel
+
+_expect:_
+- every returned object is a personnel
+- more than 0 personnel are returned
+
+_fails:_
+- if the method does not return all personnel or throws an error
