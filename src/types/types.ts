@@ -31,3 +31,16 @@ export type Partner = {
     project: string;
     [key: string]: any;
 };
+
+export type Personnel = {
+    id?: number,
+    name: string,
+    title: string,
+    alias: string,
+    con_position: string,
+    image: string,
+    email_to: string,
+    office_hours_start: string,
+    office_hours_end: string,
+    [key: string]: any;
+};

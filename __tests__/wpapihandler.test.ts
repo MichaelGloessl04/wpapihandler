@@ -1,4 +1,4 @@
-import { Post, Partner } from '../src/types/types';
+import { Post, Partner, Personnel } from '../src/types/types';
 import { AuthenticationError, PostNotFoundError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -508,6 +508,30 @@ describe('WPApiHandler', () => {
       }
     });
   });
+
+  describe('get_personnel', () => {
+    it('should return all personnel', async () => {
+      /**
+       * @description Test if the method get_personnel returns all personnel
+       * @expect every returned object is a personnel
+       * @expect more than 0 personnel are returned
+       * @fails if the method does not return all personnel or throws an error
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      try {
+        const personnel: Array<Personnel> = await wpa.get_personnel();
+
+        expect(personnel.length).toBeGreaterThan(0);
+
+        for(const person of personnel) {
+          expect(isPersonnel(person)).toBe(true);
+        }
+      } catch (error) {
+        fail();
+      }
+    });
+  });
 });
 
 
@@ -530,5 +554,20 @@ function isPartner(partner: any): boolean {
     partner.hasOwnProperty('url') &&
     partner.hasOwnProperty('project') &&
     partner.hasOwnProperty('level')
+  );
+}
+
+
+function isPersonnel(person: Personnel): boolean {
+  return (
+    person.hasOwnProperty('id') &&
+    person.hasOwnProperty('name') &&
+    person.hasOwnProperty('title') &&
+    person.hasOwnProperty('alias') &&
+    person.hasOwnProperty('con_position') &&
+    person.hasOwnProperty('image') &&
+    person.hasOwnProperty('email_to') &&
+    person.hasOwnProperty('office_hours_start') &&
+    person.hasOwnProperty('office_hours_end')
   );
 }
