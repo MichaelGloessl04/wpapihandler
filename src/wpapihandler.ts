@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Headers, Post, ApiPost, Partner } from './types/types';
+import { Headers, Post, ApiPost, Partner, Personnel } from './types/types';
 import { AuthenticationError, PostNotFoundError } from './errors/error';
 
 
@@ -413,6 +413,31 @@ export class WPApiHandler {
         });
 
         return partners;
+    }
+
+    public async get_personnel(): Promise<Array<Personnel>> {
+        let url = `${this.server_address}/wp-json/wp/v2/personnel/`
+
+        const response: AxiosResponse = await axios.get(
+            url,
+            this.headers,
+        );
+
+        const personnel: Array<Personnel> = response.data.map((person: Personnel) => {
+            return {
+                id: person.id,
+                name: person.name,
+                title: person.title,
+                alias: person.alias,
+                con_position: person.con_position,
+                image: person.image,
+                email_to: person.email_to,
+                office_hours_start: person.office_hours_start,
+                office_hours_end: person.office_hours_end,
+            };
+        });
+
+        return personnel;
     }
 
     private async add_tag(tag: string): Promise<number> {
