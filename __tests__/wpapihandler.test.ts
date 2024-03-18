@@ -567,7 +567,6 @@ function isPersonnel(person: Personnel): boolean {
     person.hasOwnProperty('con_position') &&
     person.hasOwnProperty('image') &&
     person.hasOwnProperty('email_to') &&
-    person.hasOwnProperty('office_hours_start') &&
-    person.hasOwnProperty('office_hours_end')
+    person.hasOwnProperty('office_hours')
   );
 }

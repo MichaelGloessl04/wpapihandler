@@ -35,12 +35,14 @@ export type Partner = {
 export type Personnel = {
     id?: number,
     name: string,
+    short: string,
     title: string,
     alias: string,
     con_position: string,
     image: string,
     email_to: string,
-    office_hours_start: string,
-    office_hours_end: string,
+    office_hours: string,
+    location: string,
+    tags: string,
     [key: string]: any;
 };
