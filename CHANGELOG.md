@@ -1,5 +1,15 @@
 # wpapihandler
 
+## 1.3.1
+
+### Patch Changes
+
+- 0003671: feature: added method get_personnel
+- bddbcf4: hotfix: test 2.3.2 fixed wrong testing variable
+- Updated dependencies [0003671]
+- Updated dependencies [bddbcf4]
+  - wpapihandler@1.3.1
+
 ## 1.3.0
 
 ### Minor Changes
