@@ -427,13 +427,17 @@ export class WPApiHandler {
             return {
                 id: person.id,
                 name: person.name,
+                short: person.short,
                 title: person.title,
-                alias: person.alias,
-                con_position: person.con_position,
+                slug: person.slug,
+                department: person.department,
+                description: person.description,
                 image: person.image,
                 email_to: person.email_to,
-                office_hours_start: person.office_hours_start,
-                office_hours_end: person.office_hours_end,
+                office_hours: person.office_hours,
+                location: person.location,
+                tags: person.tags,
+                active: person.active,
             };
         });
 

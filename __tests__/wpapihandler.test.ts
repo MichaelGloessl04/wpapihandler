@@ -562,11 +562,16 @@ function isPersonnel(person: Personnel): boolean {
   return (
     person.hasOwnProperty('id') &&
     person.hasOwnProperty('name') &&
+    person.hasOwnProperty('short') &&
     person.hasOwnProperty('title') &&
-    person.hasOwnProperty('alias') &&
-    person.hasOwnProperty('con_position') &&
+    person.hasOwnProperty('slug') &&
+    person.hasOwnProperty('department') &&
+    person.hasOwnProperty('description') &&
     person.hasOwnProperty('image') &&
     person.hasOwnProperty('email_to') &&
-    person.hasOwnProperty('office_hours')
+    person.hasOwnProperty('office_hours') &&
+    person.hasOwnProperty('location') &&
+    person.hasOwnProperty('tags') &&
+    person.hasOwnProperty('active')
   );
 }

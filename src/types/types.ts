@@ -37,12 +37,14 @@ export type Personnel = {
     name: string,
     short: string,
     title: string,
-    alias: string,
-    con_position: string,
+    slug: string,
+    department: string,
+    description: string,
     image: string,
     email_to: string,
     office_hours: string,
     location: string,
     tags: string,
+    active: boolean,
     [key: string]: any;
 };
