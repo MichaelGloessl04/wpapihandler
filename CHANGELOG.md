@@ -1,5 +1,13 @@
 # wpapihandler
 
+## 1.3.2
+
+### Patch Changes
+
+- f7d78a3: added search property to method get_personnel
+- Updated dependencies [f7d78a3]
+  - wpapihandler@1.3.2
+
 ## 1.3.1
 
 ### Patch Changes
