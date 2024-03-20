@@ -1,4 +1,4 @@
-import { Post, Partner } from '../src/types/types';
+import { Post, Partner, Personnel } from '../src/types/types';
 import { AuthenticationError, PostNotFoundError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -94,7 +94,7 @@ describe('WPApiHandler', () => {
           expect(post.id).toEqual(1910);
           expect(post.title).toEqual('Test');
           expect(post.content).toEqual(
-              '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img loading="lazy" decoding="async" width="400" height="400" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143" srcset="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png 400w, https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3-300x300.png 300w, https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3-150x150.png 150w" sizes="(max-width: 400px) 100vw, 400px" /></figure>\n',
+              '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img decoding="async" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143"/></figure>\n',
           );
           expect(post.status).toEqual('publish');
           expect(post.tags).toEqual(['test']);
@@ -508,6 +508,30 @@ describe('WPApiHandler', () => {
       }
     });
   });
+
+  describe('get_personnel', () => {
+    it('should return all personnel', async () => {
+      /**
+       * @description Test if the method get_personnel returns all personnel
+       * @expect every returned object is a personnel
+       * @expect more than 0 personnel are returned
+       * @fails if the method does not return all personnel or throws an error
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      try {
+        const personnel: Array<Personnel> = await wpa.get_personnel();
+
+        expect(personnel.length).toBeGreaterThan(0);
+
+        for(const person of personnel) {
+          expect(isPersonnel(person)).toBe(true);
+        }
+      } catch (error) {
+        fail();
+      }
+    });
+  });
 });
 
 
@@ -530,5 +554,24 @@ function isPartner(partner: any): boolean {
     partner.hasOwnProperty('url') &&
     partner.hasOwnProperty('project') &&
     partner.hasOwnProperty('level')
+  );
+}
+
+
+function isPersonnel(person: Personnel): boolean {
+  return (
+    person.hasOwnProperty('id') &&
+    person.hasOwnProperty('name') &&
+    person.hasOwnProperty('short') &&
+    person.hasOwnProperty('title') &&
+    person.hasOwnProperty('slug') &&
+    person.hasOwnProperty('department') &&
+    person.hasOwnProperty('description') &&
+    person.hasOwnProperty('image') &&
+    person.hasOwnProperty('email_to') &&
+    person.hasOwnProperty('office_hours') &&
+    person.hasOwnProperty('location') &&
+    person.hasOwnProperty('tags') &&
+    person.hasOwnProperty('active')
   );
 }

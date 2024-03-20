@@ -1,5 +1,5 @@
 import { WPApiHandler } from "./wpapihandler";
-import { Headers, Post, Partner} from "./types/types";
+import { Headers, Post, Partner, Personnel} from "./types/types";
 import { AuthenticationError, PostNotFoundError } from "./errors/error";
 
 
@@ -9,5 +9,6 @@ export {
     Headers,
     Partner,
     AuthenticationError,
-    PostNotFoundError
+    PostNotFoundError,
+    Personnel
 }

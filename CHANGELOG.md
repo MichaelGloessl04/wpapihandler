@@ -1,5 +1,32 @@
 # wpapihandler
 
+## 1.3.1
+
+### Patch Changes
+
+- 0003671: feature: added method get_personnel
+- bddbcf4: hotfix: test 2.3.2 fixed wrong testing variable
+- Updated dependencies [0003671]
+- Updated dependencies [bddbcf4]
+  - wpapihandler@1.3.1
+
+## 1.3.0
+
+### Minor Changes
+
+- d915001: added method get_partners()
+
+### Patch Changes
+
+- 0918422: Added attribute to get_partners method:
+
+  - the project attr to filter results
+  - added missing entitiies ´level´ and ´project´ to the type Partner
+
+- Updated dependencies [0918422]
+- Updated dependencies [d915001]
+  - wpapihandler@1.3.0
+
 ## 1.2.3
 
 ### Patch Changes
