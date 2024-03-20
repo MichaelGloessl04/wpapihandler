@@ -415,8 +415,12 @@ export class WPApiHandler {
         return partners;
     }
 
-    public async get_personnel(): Promise<Array<Personnel>> {
+    public async get_personnel(search?: string): Promise<Array<Personnel>> {
         let url = `${this.server_address}/wp-json/wp/v2/personnel/`
+
+        if (search !== undefined) {
+            url += `?search=${search}`;
+        }
 
         const response: AxiosResponse = await axios.get(
             url,
