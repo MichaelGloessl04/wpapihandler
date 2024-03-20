@@ -531,6 +531,33 @@ describe('WPApiHandler', () => {
         fail();
       }
     });
+
+    it('should return personnel with search',async () => {
+      /**
+       * @description Test if the method get_personnel returns personnel with search
+       * @expect every returned object is a personnel
+       * @expect more than 0 personnel are returned
+       * @expect the name of the personnel contains the search
+       * @fails if the method does not return personnel with search or throws an error
+       * @fails if the name of the personnel does not contain the search
+       * @fails if the returned object is not a personnel
+       * @fails if the method does not return all personnel or throws an error
+      */
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const search = 'Ableitner';
+
+      try {
+        const personnel: Array<Personnel> = await wpa.get_personnel(search);
+
+        expect(personnel.length).toBeGreaterThan(0);
+        for(const person of personnel) {
+          expect(isPersonnel(person)).toBe(true);
+          expect(person.name.toLowerCase()).toContain(search.toLowerCase());
+        }
+      } catch (error) {
+        fail();
+      }
+    });
   });
 });
 
