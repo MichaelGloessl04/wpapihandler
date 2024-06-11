@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Headers, Post, ApiPost, Partner, Personnel } from './types/types';
+import { Headers, Post, ApiPost, Partner, Personnel, Event } from './types/types';
 import { AuthenticationError, PostNotFoundError } from './errors/error';
 
 
@@ -415,6 +415,28 @@ export class WPApiHandler {
         return partners;
     }
 
+    /**
+     * Asynchronously retrieves the personnel from the WordPress site.
+     *
+     * @async
+     * @param {string} [search] - The search term to filter the personnel.
+     * @returns {Promise<Array<Personnel>>} A promise that resolves to an array of personnel.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * const personnel = await wpa.get_personnel();
+     * console.log(personnel);
+     *
+     * const personnel = await wpa.get_personnel('John Doe');
+     * console.log(personnel);
+     */
     public async get_personnel(search?: string): Promise<Array<Personnel>> {
         let url = `${this.server_address}/wp-json/wp/v2/personnel/`
 
@@ -446,6 +468,51 @@ export class WPApiHandler {
         });
 
         return personnel;
+    }
+
+    /**
+     * Asynchronously retrieves the events from the WordPress site.
+     *
+     * @async
+     * @param {number} [event_id] - The ID of a specific event to be retrieved.
+     * @returns {Promise<Array<Event>>} A promise that resolves to an array of events.
+     *
+     * @example
+     * const wpa = new WPApiHandler(
+     *      'https://example.com',
+     *      {
+     *          "Content-Type": "application/json",
+     *          "Authorization": "Basic YOURACCESSTOKEN"
+     *      }
+     * );
+     *
+     * const events = await wpa.get_events();
+     * console.log(events);
+     *
+     * const events = await wpa.get_events(1);
+     * console.log(events);
+     */
+    public async get_events(event_id?: number): Promise<Array<Event>> {
+        let url = `${this.server_address}/wp-json/wp/v2/school-events/`
+
+        if (event_id) {
+            url += `?event_id=${event_id}`
+        }
+
+        const response: AxiosResponse = await axios.get(
+            url,
+            this.headers,
+        );
+
+        return response.data.map((event: Event) => {
+            return {
+                id: event.id,
+                title: event.title,
+                content: event.content,
+                image: event.image,
+                active: event.active
+            };
+        })
     }
 
     private async add_tag(tag: string): Promise<number> {

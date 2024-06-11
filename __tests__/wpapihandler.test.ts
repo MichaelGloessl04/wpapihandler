@@ -1,4 +1,4 @@
-import { Post, Partner, Personnel } from '../src/types/types';
+import { Post, Partner, Personnel, Event } from '../src/types/types';
 import { AuthenticationError, PostNotFoundError } from '../src/errors/error';
 import { WPApiHandler } from '../src/wpapihandler';
 import { Buffer } from 'buffer';
@@ -39,13 +39,9 @@ describe('WPApiHandler', () => {
        */
       const wpa = new WPApiHandler(serverAddress, headers);
 
-      try {
-        const totalPosts = await wpa.post_len();
+      const totalPosts = await wpa.post_len();
 
-        expect(totalPosts).toBeGreaterThan(0);
-      } catch (error) {
-        fail();
-      }
+      expect(totalPosts).toBeGreaterThan(0);
     });
   });
 
@@ -59,17 +55,13 @@ describe('WPApiHandler', () => {
        */
       const wpa = new WPApiHandler(serverAddress, headers);
 
-      try {
-        const posts: Post[] = await wpa.get_posts();
+      const posts: Post[] = await wpa.get_posts();
 
-        posts.forEach((post) => {
-          expect(isPost(post)).toBe(true);
-        });
+      posts.forEach((post) => {
+        expect(isPost(post)).toBe(true);
+      });
 
-        expect(posts.length).toBeGreaterThan(0);
-      } catch (error) {
-        fail();
-      }
+      expect(posts.length).toBeGreaterThan(0);
     }, 10000);
 
     it('should return post with specified id', async () => {
@@ -85,45 +77,41 @@ describe('WPApiHandler', () => {
        */
       const wpa = new WPApiHandler(serverAddress, headers);
 
-      try {
-        const posts: Array<Post> = await wpa.get_posts(1910);
-        if (posts.length > 0) {
-          const post: Post = posts[0]!;  // TODO: find a way to not use the ! operator
-          expect(isPost(post)).toBe(true);
-
-          expect(post.id).toEqual(1910);
-          expect(post.title).toEqual('Test');
-          expect(post.content).toEqual(
-              '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img decoding="async" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143"/></figure>\n',
-          );
-          expect(post.status).toEqual('publish');
-          expect(post.tags).toEqual(['test']);
-        } else {
-          fail();
-        }
-      } catch (error) {
+      const posts: Array<Post> = await wpa.get_posts(1910);
+      if (posts[0] === undefined) {
         fail();
       }
+
+      const post: Post = posts[0];  // TODO: find a way to not use the ! operator
+      expect(isPost(post)).toBe(true);
+
+      expect(post.id).toEqual(1910);
+      expect(post.title).toEqual('Test');
+      expect(post.content).toEqual(
+          '\n<p>Test Content</p>\n\n\n\n<figure class="wp-block-image size-full"><img decoding="async" src="https://dev.htlweiz.at/wordpress/wp-content/uploads/2024/03/test_3.png" alt="" class="wp-image-2143"/></figure>\n',
+      );
+      expect(post.status).toEqual('publish');
+      expect(post.tags).toEqual(['test']);
     });
 
     it('should throw PostNotFoundError if the post does not exist', async () => {
-        /**
-         * @description Test if the method remove_post throws a PostNotFoundError if the post does not exist
-         * @expect a PostNotFoundError is thrown
-         * @fails if the method does not throw a PostNotFoundError or throws a different error
-         */
-        const wpa = new WPApiHandler(serverAddress, headers);
-        const post_id = 0;
+      /**
+       * @description Test if the method remove_post throws a PostNotFoundError if the post does not exist
+       * @expect a PostNotFoundError is thrown
+       * @fails if the method does not throw a PostNotFoundError or throws a different error
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+      const post_id = 0;
 
-        try {
-            await wpa.get_posts(post_id);
-            fail();
-        } catch (error: any) {
-            expect(error).toBeInstanceOf(PostNotFoundError);
-            expect(error.message).toEqual(
-                `Post with ID '${post_id}' does not exist.`,
-            );
-        }
+      try {
+          await wpa.get_posts(post_id);
+          fail();
+      } catch (error: any) {
+          expect(error).toBeInstanceOf(PostNotFoundError);
+          expect(error.message).toEqual(
+              `Post with ID '${post_id}' does not exist.`,
+          );
+      }
     });
 
     it('should throw PostNotFoundError if the post does not exist', async () => {
@@ -150,16 +138,12 @@ describe('WPApiHandler', () => {
       const wpa = new WPApiHandler(serverAddress, headers);
       const tags: string[] = ['test'];
 
-      try {
-        const posts: Array<Post> = await wpa.get_posts(undefined, tags);
-        expect(posts.length).toEqual(1);
-        posts.forEach((post) => {
-          expect(isPost(post)).toBe(true);
-          expect(post.tags).toEqual(tags);
-        });
-      } catch (error) {
-        fail();
-      }
+      const posts: Array<Post> = await wpa.get_posts(undefined, tags);
+      expect(posts.length).toEqual(1);
+      posts.forEach((post) => {
+        expect(isPost(post)).toBe(true);
+        expect(post.tags).toEqual(tags);
+      });
     });
   });
 
@@ -559,6 +543,43 @@ describe('WPApiHandler', () => {
       }
     });
   });
+
+  describe('get_events', () => {
+    it('should return all active events', async () => {
+      /**
+       * @description Test if the method get_events returns events
+       * @expect ...
+       * @fails if ...
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      const events: Array<Event> = await wpa.get_events();
+
+      expect(events.length).toBeGreaterThan(0);
+      for(const event of events) {
+        expect(isEvent(event)).toBe(true);
+      }
+    }, 10000);
+
+    it('should return the event with the given id', async () => {
+      /**
+       * @description Test if the method get_events returns a single event with the given id
+       * @expect ...
+       * @fails if ...
+       */
+      const wpa = new WPApiHandler(serverAddress, headers);
+
+      const event_id: number = 4;
+
+      const events: Event[] = await wpa.get_events(event_id);
+      if (events[0] === undefined) {
+        fail();
+      }
+      const event: Event = events[0];
+      expect(isEvent(event)).toEqual(true);
+      expect(Number(event.id)).toEqual(event_id);
+    })
+  });
 });
 
 
@@ -600,5 +621,16 @@ function isPersonnel(person: Personnel): boolean {
     person.hasOwnProperty('location') &&
     person.hasOwnProperty('tags') &&
     person.hasOwnProperty('active')
+  );
+}
+
+
+function isEvent(event: Event): boolean {
+  return (
+    event.hasOwnProperty('id') &&
+    event.hasOwnProperty('title') &&
+    event.hasOwnProperty('content') &&
+    event.hasOwnProperty('image') &&
+    event.hasOwnProperty('active') 
   );
 }
