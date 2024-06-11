@@ -48,3 +48,11 @@ export type Personnel = {
     active: boolean,
     [key: string]: any;
 };
+
+export type Event = {
+    id?: number,
+    title: string,
+    content: string,
+    image: string,
+    active: boolean
+}
